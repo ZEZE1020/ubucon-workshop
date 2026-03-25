@@ -1,12 +1,21 @@
-# Lab 01: Ubuntu on WSL2 Setup
+# Lab 01: Environment Setup
 
-> **Duration:** 15 minutes
+> **Duration:** 10-15 minutes
 
-In this lab, you'll install Ubuntu on WSL2 and configure it for development.
+In this lab, you'll set up your development environment for the workshop.
 
-## Install Ubuntu
+**Jump to your OS:**
+- [Windows (WSL2)](#windows-wsl2)
+- [Linux (Native)](#linux-native)
+- [macOS](#macos)
 
-### Option 1: Command Line (Recommended)
+---
+
+## Windows (WSL2)
+
+### Install Ubuntu on WSL2
+
+#### Option 1: Command Line (Recommended)
 
 Open PowerShell or Windows Terminal:
 
@@ -15,13 +24,13 @@ Open PowerShell or Windows Terminal:
 wsl --install -d Ubuntu-24.04
 ```
 
-### Option 2: Microsoft Store
+#### Option 2: Microsoft Store
 
 1. Open Microsoft Store
 2. Search for "Ubuntu 24.04 LTS"
 3. Click "Get" and then "Install"
 
-## Initial Configuration
+### Initial Configuration
 
 After installation, Ubuntu will launch automatically. Create your user account:
 
@@ -36,20 +45,12 @@ Retype new password: ********
 - Keep it short (you'll type it often)
 - Avoid spaces and special characters
 
-## Update the System
-
-Always start with a fresh update:
+### Update and Install Tools
 
 ```bash
 # Update package lists and upgrade installed packages
 sudo apt update && sudo apt upgrade -y
-```
 
-## Install Essential Tools
-
-Install the tools we'll need for the workshop:
-
-```bash
 # Install essential packages
 sudo apt install -y \
     curl \
@@ -62,19 +63,14 @@ sudo apt install -y \
     lsb-release
 ```
 
-## Configure Git
-
-Set up your Git identity:
+### Configure Git
 
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
-
-# Verify configuration
-git config --list
 ```
 
-## WSL Configuration (Optional but Recommended)
+### WSL Configuration (Optional)
 
 Create a WSL configuration file for better performance:
 
@@ -86,80 +82,229 @@ memory=8GB
 processors=4
 swap=2GB
 localhostForwarding=true
-
-[experimental]
-sparseVhd=true
-autoMemoryReclaim=gradual
 EOF
 ```
 
-**Note:** Adjust `memory` and `processors` based on your system. Restart WSL after creating this file:
+Restart WSL after creating this file:
 
 ```powershell
 # In PowerShell
 wsl --shutdown
 ```
 
-## Verify Installation
-
-Run these commands to verify everything is working:
+### VS Code Integration
 
 ```bash
-# Check Ubuntu version
-lsb_release -a
-
-# Check WSL version
-cat /proc/version
-
-# Check available memory
-free -h
-
-# Check disk space
-df -h /
-```
-
-Expected output should show:
-- Ubuntu 24.04 LTS
-- WSL2 kernel version
-- Allocated memory from .wslconfig
-
-## VS Code Integration
-
-Open your Ubuntu home directory in VS Code:
-
-```bash
-# From Ubuntu terminal
+# Open current directory in VS Code
 code .
 ```
 
-This will:
-1. Install VS Code Server in WSL (first time only)
-2. Open VS Code connected to your Ubuntu environment
-
-## Clone the Workshop Repository
+### Clone the Workshop Repository
 
 ```bash
-# Create a workspace directory
 mkdir -p ~/workshops && cd ~/workshops
-
-# Clone this repository
 git clone https://gitlab.com/swo6933113/ubucon-workshop2026.git
 cd ubucon-workshop2026
-
-# Verify the structure
-ls -la
 ```
+
+### Next Step
+
+Proceed to [Lab 02: K3s + Cilium](../lab-02-k3s-cilium/).
+
+---
+
+## Linux Native
+
+### Update System
+
+#### Ubuntu/Debian
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+#### Fedora
+
+```bash
+sudo dnf update -y
+```
+
+### Install Essential Tools
+
+#### Ubuntu/Debian
+
+```bash
+sudo apt install -y \
+    curl \
+    wget \
+    git \
+    jq \
+    unzip \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    apt-transport-https
+```
+
+#### Fedora
+
+```bash
+sudo dnf install -y \
+    curl \
+    wget \
+    git \
+    jq \
+    unzip \
+    ca-certificates
+```
+
+### Configure Git
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+### Install Docker (Optional)
+
+```bash
+# Ubuntu/Debian
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+
+# Log out and back in for group changes to take effect
+```
+
+### Clone the Workshop Repository
+
+```bash
+mkdir -p ~/workshops && cd ~/workshops
+git clone https://gitlab.com/swo6933113/ubucon-workshop2026.git
+cd ubucon-workshop2026
+```
+
+### Verify Setup
+
+```bash
+# Check kernel version (needs 4.19+ for eBPF)
+uname -r
+
+# Check systemd
+systemctl --version
+
+# Check git
+git --version
+```
+
+### Next Step
+
+Proceed to [Lab 02: K3s + Cilium](../lab-02-k3s-cilium/).
+
+---
+
+## macOS
+
+### Install Homebrew (if not installed)
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Follow the post-installation instructions to add Homebrew to your PATH.
+
+### Install Essential Tools
+
+```bash
+brew install \
+    curl \
+    wget \
+    git \
+    jq \
+    coreutils
+```
+
+### Configure Git
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+### Set Up Container Environment
+
+Choose ONE of the following options:
+
+#### Option A: Docker Desktop (Easiest)
+
+```bash
+brew install --cask docker
+```
+
+Open Docker Desktop and complete the setup wizard.
+
+#### Option B: Lima (Lightweight Linux VMs)
+
+```bash
+# Install Lima
+brew install lima
+
+# Create an Ubuntu VM with K3s
+limactl start --name=k3s template://k3s
+
+# Or create a plain Ubuntu VM
+limactl start --name=ubuntu template://ubuntu-lts
+```
+
+To enter the VM:
+
+```bash
+limactl shell k3s
+# or
+limactl shell ubuntu
+```
+
+#### Option C: OrbStack (Apple Silicon Recommended)
+
+```bash
+brew install --cask orbstack
+```
+
+OrbStack provides fast Linux VMs and Docker on macOS.
+
+### Clone the Workshop Repository
+
+```bash
+mkdir -p ~/workshops && cd ~/workshops
+git clone https://gitlab.com/swo6933113/ubucon-workshop2026.git
+cd ubucon-workshop2026
+```
+
+### Important Note for macOS Users
+
+K3s runs natively on Linux. On macOS, you have two options:
+
+1. **Use Lima/OrbStack VM**: Run K3s inside a Linux VM (recommended)
+2. **Use Docker Desktop's Kubernetes**: Enable Kubernetes in Docker Desktop settings
+
+For the best workshop experience, we recommend using Lima:
+
+```bash
+# Start Lima VM and enter it
+limactl start --name=workshop template://ubuntu-lts
+limactl shell workshop
+
+# Now you're in a Linux environment - continue with Lab 02
+```
+
+### Next Step
+
+Proceed to [Lab 02: K3s + Cilium](../lab-02-k3s-cilium/).
+
+---
 
 ## Troubleshooting
 
-### "The WSL 2 kernel file is not found"
-
-```powershell
-# In PowerShell (Admin)
-wsl --update
-```
-
-### Ubuntu Runs Very Slowly
+### Windows: Ubuntu Runs Very Slowly
 
 1. Check if you're using WSL 2:
    ```powershell
@@ -170,32 +315,39 @@ wsl --update
    wsl --set-version Ubuntu-24.04 2
    ```
 
-### "Permission denied" Errors
-
-Ensure you're not working in `/mnt/c/` (Windows filesystem). Stay in your Linux home directory (`~`) for best performance.
-
-### Network Issues Behind Proxy
-
-If you're behind a corporate proxy:
+### Linux: Permission Denied for Docker
 
 ```bash
-# Add to ~/.bashrc
-export http_proxy="http://proxy.example.com:8080"
-export https_proxy="http://proxy.example.com:8080"
-export no_proxy="localhost,127.0.0.1"
+sudo usermod -aG docker $USER
+# Log out and back in
+```
+
+### macOS: Lima VM Won't Start
+
+```bash
+# Check Lima status
+limactl list
+
+# Stop and restart
+limactl stop workshop
+limactl start workshop
+```
+
+### All Platforms: Git Clone Fails
+
+If you're behind a proxy:
+
+```bash
+git config --global http.proxy http://proxy.example.com:8080
+git config --global https.proxy http://proxy.example.com:8080
 ```
 
 ## Quick Reference
 
-| Command | Description |
-|---------|-------------|
-| `wsl` | Start default WSL distribution |
-| `wsl -l -v` | List installed distributions |
-| `wsl --shutdown` | Stop all WSL instances |
-| `wsl --update` | Update WSL kernel |
-| `explorer.exe .` | Open current directory in Windows Explorer |
-| `code .` | Open current directory in VS Code |
-
-## Next Step
-
-Your Ubuntu environment is ready! Proceed to [Lab 02: K3s + Cilium](../lab-02-k3s-cilium/).
+| Platform | Shell | Package Manager |
+|----------|-------|----------------|
+| Windows (WSL) | bash | apt |
+| Ubuntu/Debian | bash | apt |
+| Fedora | bash | dnf |
+| macOS | zsh | brew |
+| macOS (Lima) | bash | apt (inside VM) |

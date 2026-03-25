@@ -11,6 +11,14 @@ In this lab, you'll learn how to securely manage secrets using SOPS (Secrets OPe
 - Build secure containers with Canonical Chiseled images
 - Deploy secrets safely to Kubernetes
 
+## Platform Notes
+
+| Platform | Notes |
+|----------|-------|
+| **All platforms** | SOPS and age work the same way everywhere |
+| **macOS (Lima)** | Run commands inside the VM: `limactl shell workshop` |
+| **Docker builds** | Require Docker or compatible runtime |
+
 ## Why SOPS + age?
 
 | Traditional Approach | SOPS + age Approach |
@@ -135,7 +143,7 @@ sops ../app/secrets.yaml
 sops -d ../app/secrets.yaml | kubectl apply -f -
 ```
 
-## Step 5: Build the Secure Container
+## Step 5: Build the Secure Container (Optional)
 
 The Dockerfile uses a multi-stage build with Canonical Chiseled Ubuntu:
 
@@ -155,7 +163,7 @@ cat Dockerfile
 ### Build the Image
 
 ```bash
-# Build the container
+# Build the container (requires Docker)
 docker build -t secrets-demo:v1 .
 
 # Check image size (should be very small)
@@ -200,6 +208,36 @@ kubectl get secrets -n secrets-demo
 +-------------------------------------------------------------+
 ```
 
+## Installing SOPS and age Manually
+
+If the scripts don't install them automatically:
+
+### Ubuntu/Debian
+
+```bash
+# Install age
+sudo apt install -y age
+
+# Install sops
+SOPS_VERSION="3.8.1"
+curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64"
+sudo mv "sops-v${SOPS_VERSION}.linux.amd64" /usr/local/bin/sops
+sudo chmod +x /usr/local/bin/sops
+```
+
+### Fedora
+
+```bash
+sudo dnf install -y age
+# Install sops same as above
+```
+
+### macOS
+
+```bash
+brew install age sops
+```
+
 ## SOPS Best Practices
 
 | Do | Don't |
@@ -224,19 +262,11 @@ cat ~/.sops/key.txt
 
 ### "sops: command not found"
 
-```bash
-# Install sops
-SOPS_VERSION="3.8.1"
-curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64"
-sudo mv "sops-v${SOPS_VERSION}.linux.amd64" /usr/local/bin/sops
-sudo chmod +x /usr/local/bin/sops
-```
+See [Installing SOPS and age Manually](#installing-sops-and-age-manually) above.
 
 ### "age: command not found"
 
-```bash
-sudo apt install -y age
-```
+See [Installing SOPS and age Manually](#installing-sops-and-age-manually) above.
 
 ## Useful Commands
 

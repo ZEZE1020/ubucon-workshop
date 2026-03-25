@@ -1,12 +1,21 @@
 # Lab 00: Prerequisites
 
-> **Duration:** 10 minutes
+> **Duration:** 10-15 minutes (varies by OS)
 
 This lab ensures your system meets all requirements for the workshop.
 
-## System Requirements
+**Jump to your OS:**
+- [Windows](#windows)
+- [Linux (Native)](#linux-native)
+- [macOS](#macos)
 
-### Windows Version
+---
+
+## Windows
+
+### System Requirements
+
+#### Check Windows Version
 
 Open PowerShell and run:
 
@@ -16,7 +25,7 @@ winver
 
 **Required:** Windows 10 version 2004+ (Build 19041+) or Windows 11
 
-### Hardware
+#### Hardware
 
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
@@ -24,9 +33,9 @@ winver
 | RAM | 8 GB | 16 GB |
 | Storage | 20 GB free | 40 GB free (SSD preferred) |
 
-### Enable Virtualization
+#### Enable Virtualization
 
-1. Check if virtualization is enabled:
+Check if virtualization is enabled:
 
 ```powershell
 # In PowerShell (Admin)
@@ -35,114 +44,292 @@ Get-ComputerInfo | Select-Object HyperVisorPresent
 
 If `False`, enable it in BIOS/UEFI settings (usually under "CPU Configuration" or "Security").
 
-## Install Required Software
+### Install Required Software
 
-### 1. Windows Terminal (Recommended)
+#### 1. Windows Terminal (Recommended)
 
 ```powershell
-# Install via winget
 winget install Microsoft.WindowsTerminal
 ```
 
-Or download from [Microsoft Store](https://aka.ms/terminal).
-
-### 2. Visual Studio Code
+#### 2. Visual Studio Code
 
 ```powershell
 winget install Microsoft.VisualStudioCode
 ```
 
-After installation, add the **Remote - WSL** extension:
-1. Open VS Code
-2. Press `Ctrl+Shift+X`
-3. Search for "Remote - WSL"
-4. Click Install
+Add the **Remote - WSL** extension after installation.
 
-### 3. Enable WSL Feature
+#### 3. Enable WSL Feature
 
 Open PowerShell as Administrator:
 
 ```powershell
 # Enable WSL and Virtual Machine Platform
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+wsl --install
 ```
 
-**Restart your computer after running these commands.**
+**Restart your computer after running this command.**
 
-### 4. Set WSL 2 as Default
+#### 4. Verify WSL 2
 
-After restart, open PowerShell:
+After restart:
 
 ```powershell
+wsl --version
 wsl --set-default-version 2
 ```
 
-## Verification Checklist
-
-Run this script to verify your setup:
+### Run Verification Script
 
 ```powershell
-# Save as check-prerequisites.ps1 and run in PowerShell
-
-Write-Host "=== UbuCon Workshop Prerequisites Check ===" -ForegroundColor Cyan
-Write-Host ""
-
-# Check Windows version
-$build = [System.Environment]::OSVersion.Version.Build
-if ($build -ge 19041) {
-    Write-Host "[OK] Windows Build: $build" -ForegroundColor Green
-} else {
-    Write-Host "[FAIL] Windows Build: $build (need 19041+)" -ForegroundColor Red
-}
-
-# Check WSL
-try {
-    $wslVersion = wsl --version 2>$null
-    Write-Host "[OK] WSL is installed" -ForegroundColor Green
-} catch {
-    Write-Host "[FAIL] WSL not found" -ForegroundColor Red
-}
-
-# Check virtualization
-$hyperv = (Get-ComputerInfo).HyperVisorPresent
-if ($hyperv) {
-    Write-Host "[OK] Virtualization enabled" -ForegroundColor Green
-} else {
-    Write-Host "[FAIL] Virtualization not enabled" -ForegroundColor Red
-}
-
-# Check RAM
-$ram = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB)
-if ($ram -ge 8) {
-    Write-Host "[OK] RAM: ${ram} GB" -ForegroundColor Green
-} else {
-    Write-Host "[WARN] RAM: ${ram} GB (8 GB recommended)" -ForegroundColor Yellow
-}
-
-Write-Host ""
-Write-Host "=== Check Complete ===" -ForegroundColor Cyan
+# Download and run the check script
+cd lab-00-prerequisites
+.\check-prerequisites.ps1
 ```
+
+### Next Step
+
+Proceed to [Lab 01: Environment Setup](../lab-01-wsl-setup/) to install Ubuntu on WSL2.
+
+---
+
+## Linux Native
+
+### Supported Distributions
+
+| Distribution | Minimum Version |
+|--------------|----------------|
+| Ubuntu | 20.04 LTS |
+| Debian | 11 (Bullseye) |
+| Fedora | 38 |
+| RHEL/CentOS Stream | 9 |
+| openSUSE | Leap 15.5 |
+
+### System Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| CPU | 64-bit, 2 cores | 4+ cores |
+| RAM | 8 GB | 16 GB |
+| Storage | 20 GB free | 40 GB free |
+
+### Install Required Software
+
+#### Ubuntu/Debian
+
+```bash
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install essential tools
+sudo apt install -y \
+    curl \
+    wget \
+    git \
+    jq \
+    unzip \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    apt-transport-https
+```
+
+#### Fedora/RHEL
+
+```bash
+# Update system
+sudo dnf update -y
+
+# Install essential tools
+sudo dnf install -y \
+    curl \
+    wget \
+    git \
+    jq \
+    unzip \
+    ca-certificates
+```
+
+### Verify System
+
+```bash
+# Check kernel version (needs 4.19+ for eBPF)
+uname -r
+
+# Check available memory
+free -h
+
+# Check disk space
+df -h /
+
+# Check if systemd is running
+systemctl --version
+```
+
+### Install Docker (Optional but Recommended)
+
+```bash
+# Ubuntu/Debian
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+
+# Log out and back in, then verify
+docker --version
+```
+
+### Run Verification Script
+
+```bash
+cd lab-00-prerequisites
+chmod +x check-prerequisites-linux.sh
+./check-prerequisites-linux.sh
+```
+
+### Next Step
+
+Proceed to [Lab 01: Environment Setup](../lab-01-wsl-setup/#linux-native) to configure your environment.
+
+---
+
+## macOS
+
+### System Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| macOS Version | 12 Monterey | 14 Sonoma+ |
+| Chip | Intel or Apple Silicon | Apple Silicon |
+| RAM | 8 GB | 16 GB |
+| Storage | 20 GB free | 40 GB free |
+
+### Check Your System
+
+```bash
+# Check macOS version
+sw_vers
+
+# Check chip architecture
+uname -m
+# arm64 = Apple Silicon, x86_64 = Intel
+```
+
+### Install Homebrew
+
+If you don't have Homebrew installed:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Follow the post-installation instructions to add Homebrew to your PATH.
+
+### Install Required Software
+
+```bash
+# Install essential tools
+brew install \
+    curl \
+    wget \
+    git \
+    jq \
+    coreutils
+
+# Install Visual Studio Code (optional)
+brew install --cask visual-studio-code
+```
+
+### Choose Your Kubernetes Approach
+
+#### Option A: Docker Desktop (Easiest)
+
+```bash
+brew install --cask docker
+```
+
+After installation:
+1. Open Docker Desktop
+2. Go to Settings > Kubernetes
+3. Enable Kubernetes
+4. Apply & Restart
+
+**Note:** Docker Desktop includes a built-in Kubernetes cluster, but we'll use K3s for consistency with the workshop.
+
+#### Option B: Lima + K3s (Lightweight)
+
+Lima creates lightweight Linux VMs on macOS:
+
+```bash
+# Install Lima
+brew install lima
+
+# Create an Ubuntu VM
+limactl start --name=ubuntu template://ubuntu-lts
+
+# Enter the VM
+limactl shell ubuntu
+```
+
+#### Option C: OrbStack (Apple Silicon Recommended)
+
+```bash
+brew install --cask orbstack
+```
+
+OrbStack is a fast, lightweight alternative to Docker Desktop for Apple Silicon Macs.
+
+### Run Verification Script
+
+```bash
+cd lab-00-prerequisites
+chmod +x check-prerequisites-macos.sh
+./check-prerequisites-macos.sh
+```
+
+### Next Step
+
+Proceed to [Lab 01: Environment Setup](../lab-01-wsl-setup/#macos) to configure your environment.
+
+---
 
 ## Troubleshooting
 
-### "WSL 2 requires an update to its kernel component"
+### Windows: "WSL 2 requires an update to its kernel component"
 
-Download and install the WSL2 Linux kernel update:
-- [WSL2 Kernel Update (x64)](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
+```powershell
+wsl --update
+```
 
-### Virtualization Not Available
+### Windows: Virtualization Not Available
 
 1. Restart and enter BIOS/UEFI (usually F2, F10, or Del during boot)
 2. Find virtualization setting (Intel VT-x, AMD-V, or SVM)
 3. Enable it and save changes
 
+### Linux: Permission Denied for Docker
+
+```bash
+sudo usermod -aG docker $USER
+# Log out and back in
+```
+
+### macOS: Homebrew Command Not Found
+
+Add Homebrew to your PATH:
+
+```bash
+# For Apple Silicon
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+source ~/.zprofile
+
+# For Intel
+echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
+source ~/.zprofile
+```
+
 ### Corporate/Managed Device
 
 If your device is managed by IT:
-- Request WSL2 to be enabled via group policy
-- Ask for local admin rights for the workshop duration
-
-## Next Step
-
-Once all checks pass, proceed to [Lab 01: WSL Setup](../lab-01-wsl-setup/).
+- Request necessary permissions for virtualization
+- Ask about proxy settings for package downloads
+- Consider using a personal device for the workshop

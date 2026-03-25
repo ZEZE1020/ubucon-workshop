@@ -11,6 +11,14 @@ In this lab, you'll implement Zero Trust network security using Cilium Network P
 - Observe blocked traffic with Hubble
 - Understand Zero Trust networking principles
 
+## Platform Notes
+
+| Platform | Notes |
+|----------|-------|
+| **All platforms** | Requires K3s cluster from Lab 02 |
+| **macOS (Lima)** | Run commands inside the VM: `limactl shell workshop` |
+| **macOS (Docker Desktop)** | Works with Docker Desktop Kubernetes |
+
 ## Zero Trust Principles
 
 | Traditional Network | Zero Trust Network |
@@ -186,6 +194,13 @@ In the UI:
 3. See red lines for blocked connections
 4. See green lines for allowed connections
 
+**Note for macOS users:** If using Lima, you may need to forward the port:
+```bash
+# In a separate terminal on macOS
+limactl shell workshop -- kubectl port-forward -n kube-system svc/hubble-ui 12000:80
+# Then open http://localhost:12000 in your browser
+```
+
 ## Step 6: Generate Traffic for Visualization
 
 Open a new terminal and run:
@@ -275,6 +290,16 @@ kubectl get ciliumnetworkpolicies -A
 kubectl describe cnp -n network-lab
 ```
 
+### macOS: Cannot Access Hubble UI
+
+If running in Lima, forward the port manually:
+
+```bash
+# On macOS host
+limactl shell workshop -- kubectl port-forward -n kube-system svc/hubble-ui 12000:80 &
+open http://localhost:12000
+```
+
 ## Key Takeaways
 
 1. **Default Deny**: With no policy, all traffic is allowed. Add policies to restrict.
@@ -286,7 +311,7 @@ kubectl describe cnp -n network-lab
 
 You've completed all the labs! You now know how to:
 
-- Set up Ubuntu on WSL2 for development
+- Set up a development environment on any OS
 - Deploy Kubernetes with K3s and Cilium
 - Manage secrets securely with SOPS
 - Implement Zero Trust network policies
