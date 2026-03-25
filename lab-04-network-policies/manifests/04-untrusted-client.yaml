@@ -1,0 +1,56 @@
+# Untrusted Client - Simulated Attacker
+# This pod simulates a compromised workload attempting unauthorized access
+# Cilium will BLOCK this traffic!
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: untrusted-client
+  namespace: network-lab
+  labels:
+    app: untrusted-client
+    tier: external
+  annotations:
+    description: "Simulated untrusted pod for security demo"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: untrusted-client
+  template:
+    metadata:
+      labels:
+        app: untrusted-client
+        tier: external
+        trusted: "false"
+    spec:
+      containers:
+      - name: client
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          apk add --no-cache curl netcat-openbsd
+          echo 'Untrusted client started...'
+          echo 'This pod will attempt to access Redis (should be blocked)'
+          echo ''
+          while true; do
+            echo "[$(date '+%H:%M:%S')] Attempting Redis connection..."
+            timeout 3 nc -zv redis-backend 6379 2>&1 || echo "Connection blocked or timed out"
+            sleep 15
+          done
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "25m"
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+        securityContext:
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL

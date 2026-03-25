@@ -1,7 +1,6 @@
-"""🔐 Secure Secrets Demo - FastAPI Application
+"""Secure Secrets Demo - FastAPI Application
 
 A simple API that demonstrates secure secrets management.
-"The Matrix has you..." - but your secrets are safe with SOPS!
 """
 
 import os
@@ -10,8 +9,8 @@ from fastapi import FastAPI, HTTPException
 import yaml
 
 app = FastAPI(
-    title="🔐 Nebuchadnezzar Secrets Vault",
-    description="Secure secrets management aboard the hovercraft",
+    title="Secrets Demo API",
+    description="Demonstrates secure secrets management with SOPS",
     version="1.0.0"
 )
 
@@ -31,7 +30,7 @@ def load_secret() -> str:
 
 @app.get("/")
 async def root():
-    return {"message": "🔐 Welcome to the Nebuchadnezzar Vault", "status": "online"}
+    return {"message": "Welcome to the Secrets Demo API", "status": "online"}
 
 @app.get("/secret")
 async def get_secret():
@@ -39,7 +38,7 @@ async def get_secret():
     if not password:
         raise HTTPException(
             status_code=404,
-            detail="🕵️ 'There is no spoon'... and no secrets.yaml either!"
+            detail="No secrets.yaml found. Did you mount the secret?"
         )
     # Mask the password for demo purposes
     masked = password[:3] + "*" * (len(password) - 3)
@@ -47,4 +46,4 @@ async def get_secret():
 
 @app.get("/health")
 async def health():
-    return {"status": "operational", "crew": "ready", "quote": "Free your mind."}
+    return {"status": "healthy"}

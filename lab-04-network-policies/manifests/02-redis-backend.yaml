@@ -1,39 +1,24 @@
-# 🔴 The Oracle's Memory Bank (Redis)
-# "I'm not here to tell you how this is going to end.
-#  I'm here to tell you how it's going to begin." - The Oracle
-#
-# This is the protected data store that only authorized
-# crew members (Neo) can access.
-#
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: matrix
-  labels:
-    zone: zion
-    security: maximum
+# Redis Backend - The Protected Resource
+# This database should only be accessible by trusted services
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: the-oracle
-  namespace: matrix
+  name: redis-backend
+  namespace: network-lab
   labels:
-    app: the-oracle
-    role: memory-bank
-    movie: matrix
+    app: redis-backend
+    tier: database
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: the-oracle
+      app: redis-backend
   template:
     metadata:
       labels:
-        app: the-oracle
-        role: memory-bank
-        character: oracle
+        app: redis-backend
+        tier: database
     spec:
       containers:
       - name: redis
@@ -62,13 +47,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: the-oracle
-  namespace: matrix
+  name: redis-backend
+  namespace: network-lab
   labels:
-    app: the-oracle
+    app: redis-backend
 spec:
   selector:
-    app: the-oracle
+    app: redis-backend
   ports:
   - port: 6379
     targetPort: 6379

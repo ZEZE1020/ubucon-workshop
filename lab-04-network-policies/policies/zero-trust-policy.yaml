@@ -1,0 +1,80 @@
+# Zero Trust Network Policy
+# Implements strict access control for the network-lab namespace
+#
+# Policy Summary:
+# - Redis: Only accessible by api-server (trusted=true)
+# - Untrusted client: No egress allowed (quarantined)
+# - API server: Can only reach Redis and DNS
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: protect-redis
+  namespace: network-lab
+  labels:
+    security: zero-trust
+spec:
+  description: "Only trusted services may access Redis"
+  endpointSelector:
+    matchLabels:
+      app: redis-backend
+  ingress:
+  # Rule: Allow api-server to access Redis on port 6379
+  - fromEndpoints:
+    - matchLabels:
+        app: api-server
+        trusted: "true"
+    toPorts:
+    - ports:
+      - port: "6379"
+        protocol: TCP
+  # Implicit deny: All other ingress traffic is DROPPED
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: quarantine-untrusted
+  namespace: network-lab
+  labels:
+    security: zero-trust
+spec:
+  description: "Untrusted clients are quarantined - no egress allowed"
+  endpointSelector:
+    matchLabels:
+      app: untrusted-client
+      trusted: "false"
+  # Empty egress = DENY ALL outbound traffic
+  egress: []
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: api-server-egress
+  namespace: network-lab
+  labels:
+    security: zero-trust
+spec:
+  description: "API server can only reach Redis and DNS"
+  endpointSelector:
+    matchLabels:
+      app: api-server
+  egress:
+  # Allow DNS resolution
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s-app: kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: UDP
+      - port: "53"
+        protocol: TCP
+  # Allow connection to Redis
+  - toEndpoints:
+    - matchLabels:
+        app: redis-backend
+    toPorts:
+    - ports:
+      - port: "6379"
+        protocol: TCP

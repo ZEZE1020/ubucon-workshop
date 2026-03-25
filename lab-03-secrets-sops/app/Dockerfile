@@ -1,8 +1,5 @@
-# 🔐 Secure FastAPI Application
+# Secure FastAPI Application
 # Multi-stage build with Canonical Chiseled Ubuntu (distroless)
-#
-# "I can only show you the door. You're the one that has to walk through it."
-#                                                              - Morpheus
 
 # ============================================
 # Stage 1: Builder
@@ -52,10 +49,6 @@ COPY --from=builder /build/main.py .
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-
-# Create non-root user for security
-# Note: Chiseled images may have limited user management
-# The app runs as non-root by default in chiseled images
 
 # Expose port
 EXPOSE 8000
