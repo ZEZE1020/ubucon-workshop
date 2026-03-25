@@ -3,6 +3,8 @@
 # K3s + Cilium Installation Script
 # UbuCon Africa 2026 Workshop
 #
+# Supports: Linux (native), WSL2, Lima VMs
+#
 
 set -euo pipefail
 
@@ -11,7 +13,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 BOLD='\033[1m'
 
 print_banner() {
@@ -43,12 +45,72 @@ print_info() {
     echo -e "${CYAN}[INFO] $1${NC}"
 }
 
+# Detect environment
+detect_environment() {
+    if grep -qi microsoft /proc/version 2>/dev/null; then
+        echo "wsl"
+    elif [ -f /.dockerenv ]; then
+        echo "docker"
+    elif [ -d /lima ]; then
+        echo "lima"
+    elif [ "$(uname)" = "Darwin" ]; then
+        echo "macos"
+    else
+        echo "linux"
+    fi
+}
+
+# Check prerequisites
+check_prerequisites() {
+    print_step "Checking prerequisites"
+    
+    # Check if running on Linux
+    if [ "$(uname)" = "Darwin" ]; then
+        print_error "This script must run on Linux."
+        print_info "On macOS, use Lima or OrbStack to create a Linux VM first."
+        print_info "Example: limactl shell workshop"
+        exit 1
+    fi
+    
+    # Check kernel version for eBPF
+    KERNEL_VERSION=$(uname -r | cut -d. -f1-2)
+    KERNEL_MAJOR=$(echo $KERNEL_VERSION | cut -d. -f1)
+    KERNEL_MINOR=$(echo $KERNEL_VERSION | cut -d. -f2)
+    
+    if [ "$KERNEL_MAJOR" -lt 4 ] || ([ "$KERNEL_MAJOR" -eq 4 ] && [ "$KERNEL_MINOR" -lt 19 ]); then
+        print_warning "Kernel version $(uname -r) may not fully support eBPF."
+        print_info "Recommended: kernel 4.19 or later"
+    else
+        print_success "Kernel version: $(uname -r)"
+    fi
+    
+    # Check for curl
+    if ! command -v curl &> /dev/null; then
+        print_error "curl is required but not installed."
+        exit 1
+    fi
+    print_success "curl is available"
+    
+    # Check for systemd
+    if ! command -v systemctl &> /dev/null; then
+        print_warning "systemd not found. K3s may not work correctly."
+    else
+        print_success "systemd is available"
+    fi
+    
+    ENV=$(detect_environment)
+    print_info "Detected environment: $ENV"
+}
+
 # Main installation
 main() {
     print_banner
     
     echo -e "${CYAN}This script will install K3s and Cilium on your system.${NC}"
     echo -e "${CYAN}It requires sudo privileges for installation.${NC}\n"
+    
+    check_prerequisites
+    
     sleep 2
 
     # Step 1: Install K3s without Flannel
@@ -71,9 +133,14 @@ main() {
     export KUBECONFIG=~/.kube/config
     
     # Add to shell profile
-    if ! grep -q "KUBECONFIG" ~/.bashrc 2>/dev/null; then
-        echo 'export KUBECONFIG=~/.kube/config' >> ~/.bashrc
-        print_info "Added KUBECONFIG to ~/.bashrc"
+    SHELL_RC="$HOME/.bashrc"
+    if [ -n "${ZSH_VERSION:-}" ] || [ -f "$HOME/.zshrc" ]; then
+        SHELL_RC="$HOME/.zshrc"
+    fi
+    
+    if ! grep -q "KUBECONFIG" "$SHELL_RC" 2>/dev/null; then
+        echo 'export KUBECONFIG=~/.kube/config' >> "$SHELL_RC"
+        print_info "Added KUBECONFIG to $SHELL_RC"
     fi
     
     print_success "KUBECONFIG configured at ~/.kube/config"
@@ -82,8 +149,14 @@ main() {
     print_step "Step 3/5: Installing Cilium CLI"
     
     CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
-    CLI_ARCH=amd64
-    if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+    
+    # Detect architecture
+    case $(uname -m) in
+        x86_64)  CLI_ARCH="amd64" ;;
+        aarch64) CLI_ARCH="arm64" ;;
+        arm64)   CLI_ARCH="arm64" ;;
+        *)       print_error "Unsupported architecture: $(uname -m)"; exit 1 ;;
+    esac
     
     curl -L --fail --remote-name-all \
         "https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}"
@@ -122,7 +195,7 @@ main() {
     echo "  cilium hubble ui          # Launch Hubble UI"
     echo "  kubectl get pods -A       # All pods"
     echo ""
-    echo -e "${YELLOW}Note: Run 'source ~/.bashrc' or open a new terminal${NC}"
+    echo -e "${YELLOW}Note: Run 'source $SHELL_RC' or open a new terminal${NC}"
     echo -e "${YELLOW}to ensure KUBECONFIG is set correctly.${NC}"
     echo ""
 }

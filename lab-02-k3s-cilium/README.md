@@ -11,6 +11,16 @@ In this lab, you'll deploy a lightweight Kubernetes cluster using K3s with Ciliu
 - Enable Hubble for network observability
 - Verify cluster health
 
+## Platform Notes
+
+| Platform | Instructions |
+|----------|-------------|
+| **Windows (WSL2)** | Run commands directly in Ubuntu terminal |
+| **Linux** | Run commands directly in terminal |
+| **macOS (Lima)** | First enter VM: `limactl shell workshop` |
+| **macOS (OrbStack)** | Use OrbStack's Linux machine |
+| **macOS (Docker Desktop)** | See [Alternative: Docker Desktop](#alternative-docker-desktop-kubernetes) |
+
 ## Why K3s + Cilium?
 
 | Component | Purpose |
@@ -49,7 +59,7 @@ curl -sfL https://get.k3s.io | \
 ```
 
 - `--flannel-backend=none`: Disables the default CNI so Cilium can take over
-- `--disable-network-policy`: Lets Cilium handle network policies instead of kube-proxy
+- `--disable-network-policy`: Lets Cilium handle network policies
 
 **Cilium Deployment:**
 ```bash
@@ -106,11 +116,9 @@ cilium version
 ### Test Connectivity
 
 ```bash
-# Run Cilium connectivity test
+# Run Cilium connectivity test (takes a few minutes)
 cilium connectivity test
 ```
-
-This deploys test pods and verifies network connectivity. It takes a few minutes.
 
 ## Launch Hubble UI
 
@@ -131,7 +139,7 @@ This will:
 
 ```
 +-------------------------------------------------------------+
-|                        WSL2 Ubuntu                          |
+|                    Your Environment                         |
 |  +-------------------------------------------------------+  |
 |  |                    K3s Cluster                        |  |
 |  |  +-------------+  +-------------+  +-------------+   |  |
@@ -150,6 +158,38 @@ This will:
 |  +-------------------------------------------------------+  |
 +-------------------------------------------------------------+
 ```
+
+## Alternative: Docker Desktop Kubernetes
+
+If you're on macOS and prefer Docker Desktop:
+
+1. Open Docker Desktop
+2. Go to **Settings** > **Kubernetes**
+3. Check **Enable Kubernetes**
+4. Click **Apply & Restart**
+
+Then install Cilium:
+
+```bash
+# Install Cilium CLI
+if [[ $(uname -m) == "arm64" ]]; then
+    CLI_ARCH=arm64
+else
+    CLI_ARCH=amd64
+fi
+
+curl -L --fail --remote-name-all \
+    "https://github.com/cilium/cilium-cli/releases/latest/download/cilium-darwin-${CLI_ARCH}.tar.gz"
+tar xzvf cilium-darwin-${CLI_ARCH}.tar.gz
+sudo mv cilium /usr/local/bin/
+rm cilium-darwin-${CLI_ARCH}.tar.gz
+
+# Install Cilium (may need to replace kube-proxy)
+cilium install --version 1.15.0
+cilium hubble enable --ui
+```
+
+**Note:** Docker Desktop's Kubernetes has some limitations compared to K3s. For the full workshop experience, we recommend using Lima or a native Linux environment.
 
 ## Useful Commands
 
@@ -184,7 +224,9 @@ export KUBECONFIG=~/.kube/config
 sudo k3s kubectl get nodes
 ```
 
-### Cluster Won't Start After WSL Restart
+### Cluster Won't Start After Restart
+
+#### Linux/WSL
 
 ```bash
 # Restart K3s service
@@ -192,6 +234,18 @@ sudo systemctl restart k3s
 
 # Check service status
 sudo systemctl status k3s
+```
+
+#### macOS (Lima)
+
+```bash
+# Restart the VM
+limactl stop workshop
+limactl start workshop
+limactl shell workshop
+
+# Inside VM, restart K3s
+sudo systemctl restart k3s
 ```
 
 ### Reset Everything
@@ -205,6 +259,10 @@ If you need to start fresh:
 # Re-run installation
 ./install-k3s-cilium.sh
 ```
+
+### macOS: eBPF Not Supported
+
+eBPF requires a Linux kernel. On macOS, you must run K3s inside a Linux VM (Lima, OrbStack, or Docker Desktop's VM).
 
 ## Next Step
 

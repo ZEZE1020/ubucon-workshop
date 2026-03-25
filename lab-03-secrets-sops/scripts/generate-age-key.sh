@@ -3,6 +3,8 @@
 # Age Key Generator for SOPS
 # UbuCon Africa 2026 Workshop
 #
+# Supports: Linux, macOS, WSL
+#
 
 set -euo pipefail
 
@@ -20,10 +22,49 @@ echo "     UbuCon Africa 2026 Workshop"
 echo "======================================================"
 echo -e "${NC}"
 
-# Check if age is installed
+# Detect OS
+detect_os() {
+    case "$(uname -s)" in
+        Linux*)  echo "linux" ;;
+        Darwin*) echo "macos" ;;
+        *)       echo "unknown" ;;
+    esac
+}
+
+OS=$(detect_os)
+echo -e "${CYAN}[INFO] Detected OS: $OS${NC}"
+
+# Check if age is installed, install if not
 if ! command -v age-keygen &> /dev/null; then
     echo -e "${YELLOW}[INFO] 'age' is not installed. Installing...${NC}"
-    sudo apt-get update && sudo apt-get install -y age
+    
+    case $OS in
+        linux)
+            if command -v apt-get &> /dev/null; then
+                sudo apt-get update && sudo apt-get install -y age
+            elif command -v dnf &> /dev/null; then
+                sudo dnf install -y age
+            elif command -v pacman &> /dev/null; then
+                sudo pacman -S age
+            else
+                echo -e "${RED}[ERROR] Could not detect package manager. Please install 'age' manually.${NC}"
+                exit 1
+            fi
+            ;;
+        macos)
+            if command -v brew &> /dev/null; then
+                brew install age
+            else
+                echo -e "${RED}[ERROR] Homebrew not found. Please install 'age' manually.${NC}"
+                exit 1
+            fi
+            ;;
+        *)
+            echo -e "${RED}[ERROR] Unsupported OS. Please install 'age' manually.${NC}"
+            exit 1
+            ;;
+    esac
+    
     echo -e "${GREEN}[OK] age installed successfully!${NC}"
 fi
 
@@ -44,6 +85,10 @@ if [ -f "${KEY_FILE}" ]; then
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         echo -e "${CYAN}[INFO] Keeping existing key.${NC}"
+        
+        # Still export the public key
+        PUBLIC_KEY=$(grep "public key:" "${KEY_FILE}" | awk '{print $NF}')
+        echo -e "${CYAN}Public key: ${PUBLIC_KEY}${NC}"
         exit 0
     fi
 fi
@@ -66,12 +111,19 @@ echo -e "\n${CYAN}>>> Setting Environment Variables${NC}\n"
 export SOPS_AGE_KEY_FILE="${KEY_FILE}"
 export SOPS_AGE_RECIPIENTS="${PUBLIC_KEY}"
 
-# Add to bashrc if not present
-if ! grep -q "SOPS_AGE_KEY_FILE" ~/.bashrc 2>/dev/null; then
-    echo "" >> ~/.bashrc
-    echo "# SOPS Age encryption key" >> ~/.bashrc
-    echo "export SOPS_AGE_KEY_FILE=\"${KEY_FILE}\"" >> ~/.bashrc
-    echo -e "${GREEN}[OK] Added SOPS_AGE_KEY_FILE to ~/.bashrc${NC}"
+# Detect shell config file
+if [ -n "${ZSH_VERSION:-}" ] || [ -f "$HOME/.zshrc" ]; then
+    SHELL_RC="$HOME/.zshrc"
+else
+    SHELL_RC="$HOME/.bashrc"
+fi
+
+# Add to shell config if not present
+if ! grep -q "SOPS_AGE_KEY_FILE" "$SHELL_RC" 2>/dev/null; then
+    echo "" >> "$SHELL_RC"
+    echo "# SOPS Age encryption key" >> "$SHELL_RC"
+    echo "export SOPS_AGE_KEY_FILE=\"${KEY_FILE}\"" >> "$SHELL_RC"
+    echo -e "${GREEN}[OK] Added SOPS_AGE_KEY_FILE to $SHELL_RC${NC}"
 fi
 
 # Create .sops.yaml config
@@ -92,7 +144,7 @@ echo -e "${GREEN}     Key Generation Complete!${NC}"
 echo -e "${GREEN}======================================================${NC}"
 echo ""
 echo "Next Steps:"
-echo "  1. Source your bashrc: source ~/.bashrc"
+echo "  1. Source your shell config: source $SHELL_RC"
 echo "  2. Encrypt secrets: ./encrypt-in-place.sh"
 echo ""
 echo -e "${RED}WARNING: NEVER commit key.txt to version control!${NC}"
