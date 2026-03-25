@@ -1,0 +1,9 @@
+# Create isolated namespace for network policy lab
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: network-lab
+  labels:
+    purpose: security-demo
+    lab: network-policies

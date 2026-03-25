@@ -1,93 +1,107 @@
-# ubucon-workshop2026
+# Building Secure Dev Environments with Ubuntu on WSL
 
+> **UbuCon Africa 2026 - Nairobi, Kenya**
 
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com)
+[![WSL](https://img.shields.io/badge/WSL2-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows/wsl/)
+[![K3s](https://img.shields.io/badge/K3s-Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://k3s.io)
+[![Cilium](https://img.shields.io/badge/Cilium-eBPF-F8C517?style=for-the-badge&logo=cilium&logoColor=black)](https://cilium.io)
 
-## Getting started
+## Welcome! Karibu!
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+This hands-on workshop will guide you through building a secure, production-grade development environment using Ubuntu on Windows Subsystem for Linux (WSL). You'll learn industry best practices for container security, secrets management, and network policies.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+**By the end of this workshop, you will:**
+- Set up Ubuntu on WSL2 with a local Kubernetes cluster (K3s)
+- Implement GitOps-friendly secrets encryption with SOPS and age
+- Build minimal-attack-surface containers using Canonical Chiseled images
+- Apply Zero Trust network policies with Cilium eBPF
+- Visualize network traffic and security events with Hubble
 
-## Add your files
+## Prerequisites
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Before starting, ensure you have:
+
+| Requirement | Minimum | Recommended |
+|-------------|---------|-------------|
+| Windows Version | Windows 10 (Build 19041+) | Windows 11 |
+| RAM | 8 GB | 16 GB |
+| Free Disk Space | 20 GB | 40 GB |
+| WSL Version | WSL 2 | WSL 2 |
+
+**Software to install beforehand:**
+- [Windows Terminal](https://aka.ms/terminal) (recommended)
+- [Visual Studio Code](https://code.visualstudio.com/) with [Remote - WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)
+
+## Workshop Structure
+
+Follow the labs in order. Each lab builds on the previous one.
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/swo6933113/ubucon-workshop2026.git
-git branch -M main
-git push -uf origin main
+.
+├── lab-00-prerequisites/     # System requirements & initial setup
+├── lab-01-wsl-setup/         # Ubuntu on WSL2 installation
+├── lab-02-k3s-cilium/        # Kubernetes cluster with Cilium CNI
+├── lab-03-secrets-sops/      # Secrets management with SOPS + age
+└── lab-04-network-policies/  # Zero Trust networking with Cilium
 ```
 
-## Integrate with your tools
+| Lab | Title | Duration | Description |
+|-----|-------|----------|-------------|
+| 00 | [Prerequisites](lab-00-prerequisites/) | 10 min | Verify system requirements |
+| 01 | [WSL Setup](lab-01-wsl-setup/) | 15 min | Install Ubuntu on WSL2 |
+| 02 | [K3s + Cilium](lab-02-k3s-cilium/) | 20 min | Deploy local Kubernetes cluster |
+| 03 | [Secrets with SOPS](lab-03-secrets-sops/) | 25 min | Encrypt secrets for GitOps |
+| 04 | [Network Policies](lab-04-network-policies/) | 30 min | Implement Zero Trust networking |
 
-* [Set up project integrations](https://gitlab.com/swo6933113/ubucon-workshop2026/-/settings/integrations)
+**Total Duration:** ~2 hours
 
-## Collaborate with your team
+## Quick Navigation
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+- **New to WSL?** Start with [Lab 00](lab-00-prerequisites/)
+- **WSL already installed?** Jump to [Lab 02](lab-02-k3s-cilium/)
+- **Just here for Cilium?** Check [Lab 04](lab-04-network-policies/)
 
-## Test and Deploy
+## Technologies Covered
 
-Use the built-in continuous integration in GitLab.
+| Technology | Purpose | Why It Matters |
+|------------|---------|----------------|
+| **Ubuntu on WSL2** | Linux environment on Windows | Native Linux tooling without dual-boot |
+| **K3s** | Lightweight Kubernetes | Production-grade K8s that runs anywhere |
+| **Cilium** | eBPF-based networking | Kernel-level security and observability |
+| **SOPS + age** | Secrets encryption | Safe to commit encrypted secrets to Git |
+| **Chiseled Containers** | Distroless images | Minimal attack surface, no shell access |
+| **Hubble** | Network observability | Visualize and debug network flows |
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+## Getting Help
 
-***
+During the workshop:
+- Raise your hand for instructor assistance
+- Check the troubleshooting section in each lab's README
+- Ask your neighbor - pair programming encouraged!
 
-# Editing this README
+After the workshop:
+- Open an issue in this repository
+- Join the [Ubuntu Discourse](https://discourse.ubuntu.com/)
+- Connect with the [Cilium Slack community](https://cilium.io/slack)
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Resources
 
-## Suggestions for a good README
+**Documentation:**
+- [Ubuntu WSL Guide](https://ubuntu.com/wsl)
+- [K3s Documentation](https://docs.k3s.io)
+- [Cilium Documentation](https://docs.cilium.io)
+- [SOPS GitHub](https://github.com/getsops/sops)
+- [Canonical Chiseled Containers](https://ubuntu.com/blog/combining-distroless-and-ubuntu-chiselled-containers)
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+**Community:**
+- [Ubuntu Kenya Community](https://ubuntu.com/community)
+- [Cloud Native Nairobi](https://community.cncf.io/nairobi/)
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This workshop material is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+---
+
+**Happy Learning! Enjoy the workshop!**
