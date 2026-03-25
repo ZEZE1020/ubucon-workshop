@@ -1,0 +1,105 @@
+# 🛡️ Zero Trust Network Policy - The Architect's Rules
+# "The Matrix is older than you know." - The Architect
+#
+# This CiliumNetworkPolicy implements strict zero-trust:
+# ✅ Neo (FastAPI) CAN access The Oracle (Redis)
+# ❌ Agent Smith (attacker) CANNOT access anything
+#
+# Watch in Hubble UI as Agent Smith's packets get DROPPED! 🎬
+#
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: protect-the-oracle
+  namespace: matrix
+  labels:
+    security: zero-trust
+    movie: matrix
+spec:
+  description: "Only The One (Neo) may consult The Oracle"
+  endpointSelector:
+    matchLabels:
+      app: the-oracle
+  ingress:
+  # Rule 1: Allow Neo to access Redis on port 6379
+  - fromEndpoints:
+    - matchLabels:
+        app: neo
+        trusted: "true"
+    toPorts:
+    - ports:
+      - port: "6379"
+        protocol: TCP
+  # Implicit deny: All other ingress traffic is DROPPED
+  # Agent Smith's connection attempts will fail! 🛡️
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: isolate-agent-smith
+  namespace: matrix
+  labels:
+    security: zero-trust
+    movie: matrix
+spec:
+  description: "Agent Smith is quarantined - no egress allowed"
+  endpointSelector:
+    matchLabels:
+      app: agent-smith
+      trusted: "false"
+  # Empty egress = DENY ALL outbound traffic
+  egress: []
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: neo-egress-policy
+  namespace: matrix
+  labels:
+    security: zero-trust
+    movie: matrix
+spec:
+  description: "Neo can only talk to The Oracle and DNS"
+  endpointSelector:
+    matchLabels:
+      app: neo
+  egress:
+  # Allow DNS resolution
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s-app: kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: UDP
+      - port: "53"
+        protocol: TCP
+  # Allow connection to The Oracle (Redis)
+  - toEndpoints:
+    - matchLabels:
+        app: the-oracle
+    toPorts:
+    - ports:
+      - port: "6379"
+        protocol: TCP
+---
+# 📊 Monitoring tip: Use these commands to watch the magic!
+#
+# Watch policy verdicts in real-time:
+#   hubble observe --namespace matrix --verdict DROPPED
+#
+# See all flows:
+#   hubble observe --namespace matrix -f
+#
+# Launch Hubble UI:
+#   cilium hubble ui
+#
+# Test from Agent Smith pod:
+#   kubectl exec -it -n matrix deploy/agent-smith -- sh
+#   nc -zv the-oracle 6379  # Should fail!
+#
+# Test from Neo pod:
+#   kubectl exec -it -n matrix deploy/neo -- sh
+#   nc -zv the-oracle 6379  # Should succeed!
