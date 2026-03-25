@@ -9,7 +9,10 @@
 
 ## 🎯 Workshop Overview
 
-This hands-on workshop teaches you how to build a secure, production-grade development environment using:
+This hands-on workshop teaches you how to build a secure, development environment using:
+
+
+> the initial set up is for WSL2 with Ubuntu, you can however follow the lab on any device or OS
 
 - **Ubuntu on WSL2** - Linux development on Windows
 - **K3s** - Lightweight Kubernetes
@@ -89,7 +92,7 @@ Our network lab uses a Matrix theme for memorable demonstrations:
 
 1. **Distroless Containers** - Minimal attack surface with Canonical Chiseled Ubuntu
 2. **Encrypted Secrets** - SOPS + age for GitOps-safe secrets
-3. **Zero Trust Networking** - Cilium eBPF policies block unauthorized traffic
+3. **Secure Networking** - Cilium eBPF policies block unauthorized traffic
 4. **Network Observability** - Hubble UI visualizes all traffic flows
 
 ## 📚 Resources
@@ -98,11 +101,6 @@ Our network lab uses a Matrix theme for memorable demonstrations:
 - [K3s Documentation](https://docs.k3s.io)
 - [Cilium Documentation](https://docs.cilium.io)
 - [SOPS Documentation](https://github.com/getsops/sops)
-
-## 🎉 Workshop Credits
-
-**UbuCon Workshop 2026**  
-*Building Secure Dev Environments with Ubuntu on WSL*
 
 ---
 
