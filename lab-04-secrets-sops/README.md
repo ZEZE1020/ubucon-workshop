@@ -1,4 +1,4 @@
-# Lab 03: Secrets Management with SOPS
+# Lab 04: Secrets Management with SOPS
 
 > **Duration:** 25 minutes
 
@@ -45,7 +45,7 @@ lab-03-secrets-sops/
 ## Step 1: Generate Encryption Key
 
 ```bash
-cd ~/workshops/ubucon-workshop2026/lab-03-secrets-sops/scripts
+cd ~/workshops/ubucon-workshop2026/lab-04-secrets-sops/scripts
 
 # Make scripts executable
 chmod +x *.sh
@@ -220,7 +220,7 @@ sudo apt install -y age
 
 # Install sops
 SOPS_VERSION="3.8.1"
-curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64"
+curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64"{:target="_blank"}{:target=_blank}
 sudo mv "sops-v${SOPS_VERSION}.linux.amd64" /usr/local/bin/sops
 sudo chmod +x /usr/local/bin/sops
 ```
@@ -280,4 +280,4 @@ See [Installing SOPS and age Manually](#installing-sops-and-age-manually) above.
 
 ## Next Step
 
-Your secrets are now safely encrypted! Proceed to [Lab 04: Network Policies](../lab-04-network-policies/).
+Your secrets are now safely encrypted! Proceed to [Lab 05: Network Policies](../lab-05-network-policies/).

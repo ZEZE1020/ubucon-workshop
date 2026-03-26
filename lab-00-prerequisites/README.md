@@ -1,32 +1,182 @@
 # Lab 00: Prerequisites
 
-> **Duration:** 20-30 minutes (including downloads)
+> **Duration:** 30-40 minutes (including downloads)
 
-Welcome to the workshop! This lab makes sure your computer is ready so you can have a smooth experience.
+Welcome to the workshop! This first lab is one of the most important. It will guide you through setting up your computer and downloading all the necessary tools and files before the event.
+
+**Please complete this entire lab at home or on a fast connection to avoid slow downloads over conference Wi-Fi.**
 
 ---
 
-## **IMPORTANT**: Pre-Workshop Checklist (Do This Before the Event!)
+## Step 1: Clone the Workshop Repository
 
-Conference Wi-Fi can be slow. To avoid waiting for large downloads, please **run these commands at home or on a fast connection** before you arrive.
+First, you need to get all the workshop files on your computer.
 
-### Step 1: Install Docker
+1.  Open a terminal (or PowerShell on Windows).
+2.  Navigate to a directory where you want to store the workshop files (e.g., `Documents` or `Desktop`).
+3.  Clone the repository using the following command.
 
-We need Docker to run "containers," which are like lightweight packages for applications.
-
-- **Windows:** The easiest way is to install Docker Desktop from [the Docker website](https://www.docker.com/products/docker-desktop/).
-- **macOS:** We recommend Docker Desktop. You can install it with Homebrew: `brew install --cask docker`.
-- **Linux:** Install the Docker command-line tools.
     ```bash
-    # For Ubuntu/Debian
-    curl -fsSL https://get.docker.com | sudo sh
-    sudo usermod -aG docker $USER
-    # IMPORTANT: Log out and log back in after running this!
+    # TODO: Replace this with the correct repository URL
+    git clone https://github.com/placeholder/ubucon-workshop2026.git{:target=_blank}
     ```
+4.  Navigate into the newly created directory:
+    ```bash
+    cd ubucon-workshop2026
+    ```
+    You will run all commands from within this directory for the rest of the workshop.
 
-### Step 2: Pre-download the Workshop Images
+---
+## Step 2: System-Specific Setup
 
-This is the most important pre-workshop step. Open your terminal (or PowerShell on Windows) and run the following commands. This will download all the application images we will use in the workshop, which will save you up to 30 minutes.
+Now, follow the guide for your operating system.
+
+**Jump to your OS:**
+- [Windows (using PowerShell and WSL)](#windows)
+- [Linux (Native)](#linux-native)
+- [macOS (using Homebrew)](#macos)
+
+---
+
+## Windows
+
+> **A Note on PowerShell:** For the initial Windows setup, we will use **PowerShell** to install and configure the Windows Subsystem for Linux (WSL). PowerShell is a command-line tool for Windows, similar to the terminal in Linux or macOS. **Once WSL and Ubuntu are running, all other workshop labs will take place inside the Ubuntu terminal.**
+
+### System Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| CPU | 64-bit with virtualization | 4+ cores |
+| RAM | 8 GB | 16 GB |
+| Storage | 25 GB free | 40 GB free (SSD preferred) |
+
+### 1. Enable Virtualization & WSL
+1.  **Enable Virtualization** in your computer's BIOS/UEFI. This is often found under "CPU Configuration" or "Security" settings.
+2.  **Enable WSL:** Open **PowerShell as an Administrator** and run `wsl --install`. This will enable the required Windows features and install the default Ubuntu.
+3.  **Restart your computer** when prompted.
+4.  **Set WSL 2 as default:** After restarting, open PowerShell and run `wsl --set-default-version 2`.
+
+### 2. Install Docker Desktop
+The easiest way to get Docker on Windows is to install Docker Desktop.
+- Download and install from [the Docker website](https://www.docker.com/products/docker-desktop/){:target="_blank"}.{:target=_blank}
+- During setup, ensure you select the option to **use the WSL 2 based engine**.
+
+### 3. Enable `systemd` in Ubuntu
+`systemd` is a program that starts and manages other services in Linux. We need it for Kubernetes.
+
+1.  **Open your Ubuntu terminal.**
+2.  Create or edit the WSL configuration file:
+    ```bash
+    sudo nano /etc/wsl.conf
+    ```
+3.  Add these lines to the file:
+    ```ini
+    [boot]
+    systemd=true
+    ```
+4.  Save and close the file (`Ctrl+X`, then `Y`, then `Enter`).
+5.  **Shut down your WSL instance.** Open **PowerShell** and run:
+    ```powershell
+    wsl --shutdown
+    ```
+6.  **Restart your Ubuntu terminal.** It will now be running with `systemd`.
+
+### 4. Run Verification Script
+```powershell
+# In PowerShell, navigate into the cloned repo directory
+cd lab-00-prerequisites
+.\check-prerequisites.ps1
+```
+
+### Next Step
+You are now ready to move to the next lab!
+
+Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
+
+---
+
+## Linux (Native)
+
+### System Requirements
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| CPU | 64-bit, 2 cores | 4+ cores |
+| RAM | 8 GB | 16 GB |
+| Storage | 25 GB free | 40 GB free |
+
+### 1. Install Essential Tools
+```bash
+# For Ubuntu/Debian
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl wget git jq unzip ca-certificates gnupg
+
+# For Fedora/RHEL
+sudo dnf update -y
+sudo dnf install -y curl wget git jq unzip ca-certificates gnupg
+```
+
+### 2. Install Docker
+```bash
+# For Ubuntu/Debian
+curl -fsSL https://get.docker.com{:target=_blank} | sudo sh
+sudo usermod -aG docker $USER
+# IMPORTANT: Log out and log back in after running this!
+```
+
+### 3. Run Verification Script
+```bash
+# Navigate into the lab directory
+cd lab-00-prerequisites
+chmod +x check-prerequisites-linux.sh
+./check-prerequisites-linux.sh
+```
+
+### Next Step
+You are now ready to move to the next lab!
+
+Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
+
+---
+
+## macOS
+
+### 1. Install Homebrew
+If you don't have it, open your terminal and run:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"{:target=_blank}
+```
+
+### 2. Install All Workshop Tools with Brew
+Homebrew can install almost everything we need for the workshop.
+```bash
+# Install core utilities
+brew install git jq wget
+
+# Install SOPS and age for secrets management
+brew install sops age
+
+# Install GUI applications
+brew install --cask docker visual-studio-code
+```
+*Note: We are installing `git` via brew to ensure we have a recent version.*
+
+### 3. Run Verification Script
+```bash
+# Navigate into the lab directory
+cd lab-00-prerequisites
+chmod +x check-prerequisites-macos.sh
+./check-prerequisites-macos.sh
+```
+
+### Next Step
+You are now ready to move to the next lab!
+
+Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
+
+---
+## Step 3: Pre-download the Workshop Images
+
+This is the most important pre-workshop step. Open your terminal (or Ubuntu terminal on WSL) and run the following commands to download all the application images we will use.
 
 ```bash
 # Download the K3s image (for our Kubernetes cluster)
@@ -48,112 +198,18 @@ docker pull curlimages/curl:8.4.0
 # Download a Python image (for our own application)
 docker pull ubuntu/python:3.11-22.04_edge
 ```
-After running these, you can verify the images were downloaded with the `docker images` command.
 
----
-## System Checks
+### Why are we downloading these images?
 
-Now, follow the guide for your operating system to make sure everything else is ready.
+We are pre-downloading these container images to save time during the workshop. You will use them in the upcoming labs. These are the building blocks for our workshop. Here's what each one is for:
 
-**Jump to your OS:**
-- [Windows](#windows)
-- [Linux (Native)](#linux-native)
-- [macOS](#macos)
-
----
-
-## Windows
-
-### System Requirements
-
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| CPU | 64-bit with virtualization | 4+ cores |
-| RAM | 8 GB | 16 GB |
-| Storage | 25 GB free | 40 GB free (SSD preferred) |
-
-#### Enable Virtualization & WSL
-1.  **Enable Virtualization** in your computer's BIOS/UEFI. This is often found under "CPU Configuration" or "Security" settings.
-2.  **Enable WSL:** Open PowerShell as an Administrator and run `wsl --install`. This will enable the required Windows features and install the default Ubuntu.
-3.  **Restart your computer** when prompted.
-4.  **Set WSL 2 as default:** After restarting, open PowerShell and run `wsl --set-default-version 2`.
-
-### Run Verification Script
-```powershell
-# In PowerShell, navigate to this lab's directory
-cd lab-00-prerequisites
-.\check-prerequisites.ps1
-```
-
-### Next Step
-Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
-
----
-
-## Linux (Native)
-
-### System Requirements
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| CPU | 64-bit, 2 cores | 4+ cores |
-| RAM | 8 GB | 16 GB |
-| Storage | 25 GB free | 40 GB free |
-
-### Install Essential Tools
-```bash
-# For Ubuntu/Debian
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl wget git jq unzip ca-certificates
-```
-```bash
-# For Fedora/RHEL
-sudo dnf update -y
-sudo dnf install -y curl wget git jq unzip ca-certificates
-```
-
-### Run Verification Script
-```bash
-# Navigate to this lab's directory
-cd lab-00-prerequisites
-chmod +x check-prerequisites-linux.sh
-./check-prerequisites-linux.sh
-```
-
-### Next Step
-Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
-
----
-
-## macOS
-
-### System Requirements
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| macOS Version | 12 Monterey | 14 Sonoma+ |
-| Chip | Intel or Apple Silicon | Apple Silicon |
-| RAM | 8 GB | 16 GB |
-| Storage | 25 GB free | 40 GB free |
-
-### Install Homebrew & Tools
-1.  **Install Homebrew:**
-    ```bash
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    ```
-2.  **Install Tools:**
-    ```bash
-    brew install curl wget git jq coreutils
-    ```
-
-### Run Verification Script
-```bash
-# Navigate to this lab's directory
-cd lab-00-prerequisites
-chmod +x check-prerequisites-macos.sh
-./check-prerequisites-macos.sh
-```
-
-### Next Step
-Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
+| Image Name | Purpose in Workshop |
+|------------|---------------------|
+| `rancher/k3s` | The core of our lightweight Kubernetes cluster (Lab 03). |
+| `quay.io/cilium/*` | The components for Cilium networking and the Hubble UI (Lab 03 & 05). |
+| `redis` | A simple database that our sample application will use (Lab 05). |
+| `curlimages/curl` | A small utility we will use to test network connections (Lab 05). |
+| `ubuntu/python` | The base for the secure API server we will build (Lab 04). |
 
 ---
 ## Troubleshooting

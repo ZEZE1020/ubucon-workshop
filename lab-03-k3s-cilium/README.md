@@ -87,7 +87,7 @@ Hubble lets you see the network connections in your cluster.
     ```bash
     cilium hubble ui
     ```
-    This command will open the Hubble dashboard in your web browser at `http://localhost:12000`.
+    This command will open the Hubble dashboard in your web browser at `http://localhost:12000`.{:target=_blank}
 
 2.  **Explore the UI:**
     - It will look empty right now because we haven't deployed our own applications yet.
@@ -96,24 +96,58 @@ Hubble lets you see the network connections in your cluster.
 ## Troubleshooting
 
 ### `kubectl` command not found
-If you get an error that the `kubectl` command is not found, you can run this command to fix it:
+If you get an error that the `kubectl` command is not found, you likely need to set the `KUBECONFIG` environment variable.
 ```bash
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 ```
-You can also run kubectl commands directly through K3s:
+To make this permanent, add the line to your `~/.bashrc` file.
+
+You can also run `kubectl` commands directly through the `k3s` binary:
 ```bash
 sudo k3s kubectl get nodes
 ```
 
 ### Cilium pods are stuck or have errors
-This sometimes happens if the default networking wasn't disabled correctly. The fastest way to fix this is to start over.
+This can happen if K3s was not started with the default networking disabled. The fastest way to fix this is to uninstall and reinstall.
 ```bash
-# This command will completely remove K3s
+# This command will completely remove K3s from your system
 /usr/local/bin/k3s-uninstall.sh
 
-# Then, re-run the installation script
+# Then, re-run the installation script from this lab
 ./install-k3s-cilium.sh
 ```
+
+### (WSL) K3s service fails to start
+This is often because `systemd` is not enabled in your WSL distribution.
+1.  Verify `systemd` is running with `ps -p 1 -o comm=`. The output should be `systemd`.
+2.  If it is not, follow the instructions in **[Lab 02](../lab-02-wsl-setup/)** to enable it, then try the installation again.
+
+### (WSL) High CPU or Memory Usage
+By default, WSL can consume a large amount of your system's resources. To limit this, you can create a `.wslconfig` file.
+1.  Open Notepad or another text editor on your **Windows** machine.
+2.  Create a file in your user profile folder at `C:\Users\<YourUsername>\.wslconfig`.
+3.  Add the following content to the file to limit WSL to 2GB of RAM and 2 CPU cores. Adjust as needed.
+    ```ini
+    [wsl2]
+    memory=2GB
+    processors=2
+    ```
+4.  Save the file and then run `wsl --shutdown` in PowerShell for the changes to take effect.
+
+### (WSL) Accessing K3s from Windows
+To use `kubectl` from your Windows machine (if you have it installed), you need to:
+1.  Copy the K3s config file from WSL to Windows:
+    ```powershell
+    # Run this in PowerShell
+    wsl cat /etc/rancher/k3s/k3s.yaml > $env:USERPROFILE\.kube\k3s-config.yaml
+    ```
+2.  Find your WSL instance's IP address:
+    ```powershell
+    # Run this in PowerShell
+    wsl hostname -I
+    ```
+3.  Edit the `k3s-config.yaml` file on Windows and replace `127.0.0.1` with the IP address of your WSL instance.
+4.  Point your `KUBECONFIG` environment variable to this new file.
 
 ## Next Step
 

@@ -1,4 +1,4 @@
-# Lab 04: Zero Trust Network Policies with Cilium
+# Lab 05: Zero Trust Network Policies with Cilium
 
 > **Duration:** 30 minutes
 
@@ -198,7 +198,7 @@ In the UI:
 ```bash
 # In a separate terminal on macOS
 limactl shell workshop -- kubectl port-forward -n kube-system svc/hubble-ui 12000:80
-# Then open http://localhost:12000 in your browser
+# Then open http://localhost:12000{:target=_blank} in your browser
 ```
 
 ## Step 6: Generate Traffic for Visualization
@@ -297,7 +297,7 @@ If running in Lima, forward the port manually:
 ```bash
 # On macOS host
 limactl shell workshop -- kubectl port-forward -n kube-system svc/hubble-ui 12000:80 &
-open http://localhost:12000
+open http://localhost:12000{:target=_blank}
 ```
 
 ## Key Takeaways

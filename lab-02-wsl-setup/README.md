@@ -1,39 +1,16 @@
-# Lab 02: Setting Up Your Environment
+# Lab 02: WSL & Systemd Setup
 
-> **Duration:** 15-20 minutes
+> **Duration:** 10 minutes
 
-In this lab, you'll get your computer ready for the rest of the workshop. For Windows users, we'll enable a feature called `systemd`, which is needed to run tools like Kubernetes.
+This lab is for **Windows users only**. If you are on Linux or macOS, you can skip this lab.
 
-**Jump to your OS:**
-- [Windows (WSL2)](#windows-wsl2)
-- [Linux (Native)](#linux-native)
-- [macOS](#macos)
+In Lab 00, you installed Ubuntu on WSL. Now, we need to enable a feature called `systemd`.
 
----
+## Why Enable `systemd`?
 
-## Windows (WSL2)
+`systemd` is a program that starts and manages other services in Linux. We need it to run tools like Kubernetes (K3s), which we will install in the next lab. While newer versions of WSL enable this by default, these steps ensure it is active.
 
-### Step 1: Install Ubuntu on WSL2
-
-#### Option 1: Command Line (Recommended)
-
-Open PowerShell or Windows Terminal and run:
-
-```powershell
-# This command will download and install the latest Ubuntu LTS release
-wsl --install -d Ubuntu
-```
-This will create a new Ubuntu instance. You will be prompted to create a username and password.
-
-#### Option 2: Microsoft Store
-
-1. Open the Microsoft Store application.
-2. Search for "Ubuntu 24.04 LTS".
-3. Click "Get" and then "Install".
-
-### Step 2: Enable `systemd`
-
-`systemd` is a program that starts and manages other services in Linux. We need it for Kubernetes. While newer versions of WSL turn this on automatically, it's good to know how to do it yourself.
+## Step 1: Enable `systemd` in Ubuntu
 
 1.  **Open your Ubuntu terminal.**
 
@@ -60,177 +37,24 @@ This will create a new Ubuntu instance. You will be prompted to create a usernam
 
 6.  **Restart your Ubuntu terminal.** When you open it again, it will be running with `systemd`.
 
-7.  **Verify `systemd` is running.** Check that `systemd` is the first process running:
-    ```bash
-    ps -p 1 -o comm=
-    ```
-    The output should be `systemd`.
+## Step 2: Verify `systemd` is Running
 
-### Step 3: Update and Install Tools
-
+Check that `systemd` is the first process running.
 ```bash
-# Update package lists and upgrade installed packages
-sudo apt update && sudo apt upgrade -y
-
-# Install essential tools
-sudo apt install -y curl wget git jq unzip ca-certificates gnupg
+ps -p 1 -o comm=
 ```
-
-### Step 4: Configure Git
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-```
-
-### Step 5: Clone the Workshop Repository
-
-```bash
-mkdir -p ~/workshops && cd ~/workshops
-git clone https://gitlab.com/swo6933113/ubucon-workshop2026.git
-cd ubucon-workshop2026
-```
-
-### Next Step
-
-You are now ready to deploy Kubernetes!
-
-Proceed to **[Lab 03: K3s + Cilium](../lab-03-k3s-cilium/)**.
-
----
-
-## Linux (Native)
-
-### Update System
-
-#### Ubuntu/Debian
-
-```bash
-sudo apt update && sudo apt upgrade -y
-```
-
-#### Fedora
-
-```bash
-sudo dnf update -y
-```
-
-### Install Essential Tools
-
-#### Ubuntu/Debian
-
-```bash
-sudo apt install -y curl wget git jq unzip ca-certificates gnupg apt-transport-https
-```
-
-#### Fedora
-
-```bash
-sudo dnf install -y curl wget git jq unzip ca-certificates
-```
-
-### Configure Git
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-```
-
-### Install Docker (If not already installed)
-
-```bash
-# For Ubuntu/Debian
-curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker $USER
-
-# Log out and back in for group changes to take effect
-```
-
-### Clone the Workshop Repository
-
-```bash
-mkdir -p ~/workshops && cd ~/workshops
-git clone https://gitlab.com/swo6933113/ubucon-workshop2026.git
-cd ubucon-workshop2026
-```
-
-### Verify Setup
-
-```bash
-# Check your kernel version
-uname -r
-
-# Check that systemd is active
-systemctl --version
-
-# Check your git version
-git --version
-```
-
-### Next Step
-
-Proceed to **[Lab 03: K3s + Cilium](../lab-03-k3s-cilium/)**.
-
----
-
-## macOS
-
-### Install Homebrew (if not installed)
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-Follow the on-screen instructions to add Homebrew to your PATH.
-
-### Install Essential Tools
-
-```bash
-brew install curl wget git jq coreutils
-```
-
-### Configure Git
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-```
-
-### Set Up Docker
-
-The easiest way to get a container environment on macOS is with Docker Desktop.
-
-```bash
-brew install --cask docker
-```
-
-Open Docker Desktop from your Applications folder and complete the setup wizard.
-
-### Clone the Workshop Repository
-
-```bash
-mkdir -p ~/workshops && cd ~/workshops
-git clone https://gitlab.com/swo6933113/ubucon-workshop2026.git
-cd ubucon-workshop2026
-```
-
-### Next Step
-
-Proceed to **[Lab 03: K3s + Cilium](../lab-03-k3s-cilium/)**.
-
----
+The output should be `systemd`. If it is not, go through the steps again and check the troubleshooting section.
 
 ## Troubleshooting
 
-### Windows: `wsl.conf` changes not taking effect
+### `wsl.conf` changes not taking effect
 Make sure you run `wsl --shutdown` in PowerShell after saving the file. This is required to apply the new settings.
 
-### Linux: Permission Denied for Docker
-You need to log out and log back in after adding your user to the `docker` group with `sudo usermod -aG docker $USER`.
+### Command `nano` not found
+If you get an error that `nano` is not found, you can install it with `sudo apt update && sudo apt install nano`.
 
-### All Platforms: Git Clone Fails
-If you are on a school or corporate network, you may need to configure Git to use a proxy:
-```bash
-git config --global http.proxy http://proxy.example.com:8080
-git config --global https.proxy http://proxy.example.com:8080
-```
+## Next Step
+
+Your environment is now ready for Kubernetes!
+
+Proceed to **[Lab 03: K3s + Cilium](../lab-03-k3s-cilium/)**.
