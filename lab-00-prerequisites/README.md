@@ -1,8 +1,59 @@
 # Lab 00: Prerequisites
 
-> **Duration:** 10-15 minutes (varies by OS)
+> **Duration:** 20-30 minutes (including downloads)
 
-This lab ensures your system meets all requirements for the workshop.
+Welcome to the workshop! This lab makes sure your computer is ready so you can have a smooth experience.
+
+---
+
+## **IMPORTANT**: Pre-Workshop Checklist (Do This Before the Event!)
+
+Conference Wi-Fi can be slow. To avoid waiting for large downloads, please **run these commands at home or on a fast connection** before you arrive.
+
+### Step 1: Install Docker
+
+We need Docker to run "containers," which are like lightweight packages for applications.
+
+- **Windows:** The easiest way is to install Docker Desktop from [the Docker website](https://www.docker.com/products/docker-desktop/).
+- **macOS:** We recommend Docker Desktop. You can install it with Homebrew: `brew install --cask docker`.
+- **Linux:** Install the Docker command-line tools.
+    ```bash
+    # For Ubuntu/Debian
+    curl -fsSL https://get.docker.com | sudo sh
+    sudo usermod -aG docker $USER
+    # IMPORTANT: Log out and log back in after running this!
+    ```
+
+### Step 2: Pre-download the Workshop Images
+
+This is the most important pre-workshop step. Open your terminal (or PowerShell on Windows) and run the following commands. This will download all the application images we will use in the workshop, which will save you up to 30 minutes.
+
+```bash
+# Download the K3s image (for our Kubernetes cluster)
+docker pull rancher/k3s:v1.28.8-k3s.1
+
+# Download the Cilium images (for networking)
+docker pull quay.io/cilium/cilium:v1.15.1
+docker pull quay.io/cilium/operator-generic:v1.15.1
+docker pull quay.io/cilium/hubble-relay:v1.15.1
+docker pull quay.io/cilium/hubble-ui:v0.13.0
+docker pull quay.io/cilium/hubble-ui-backend:v0.13.0
+
+# Download the Redis image (a simple database)
+docker pull redis:7.2-alpine
+
+# Download a 'curl' image (for testing connections)
+docker pull curlimages/curl:8.4.0
+
+# Download a Python image (for our own application)
+docker pull ubuntu/python:3.11-22.04_edge
+```
+After running these, you can verify the images were downloaded with the `docker images` command.
+
+---
+## System Checks
+
+Now, follow the guide for your operating system to make sure everything else is ready.
 
 **Jump to your OS:**
 - [Windows](#windows)
@@ -15,321 +66,100 @@ This lab ensures your system meets all requirements for the workshop.
 
 ### System Requirements
 
-#### Check Windows Version
-
-Open PowerShell and run:
-
-```powershell
-winver
-```
-
-**Required:** Windows 10 version 2004+ (Build 19041+) or Windows 11
-
-#### Hardware
-
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
-| CPU | 64-bit with virtualization | Multi-core |
+| CPU | 64-bit with virtualization | 4+ cores |
 | RAM | 8 GB | 16 GB |
-| Storage | 20 GB free | 40 GB free (SSD preferred) |
+| Storage | 25 GB free | 40 GB free (SSD preferred) |
 
-#### Enable Virtualization
-
-Check if virtualization is enabled:
-
-```powershell
-# In PowerShell (Admin)
-Get-ComputerInfo | Select-Object HyperVisorPresent
-```
-
-If `False`, enable it in BIOS/UEFI settings (usually under "CPU Configuration" or "Security").
-
-### Install Required Software
-
-#### 1. Windows Terminal (Recommended)
-
-```powershell
-winget install Microsoft.WindowsTerminal
-```
-
-#### 2. Visual Studio Code
-
-```powershell
-winget install Microsoft.VisualStudioCode
-```
-
-Add the **Remote - WSL** extension after installation.
-
-#### 3. Enable WSL Feature
-
-Open PowerShell as Administrator:
-
-```powershell
-# Enable WSL and Virtual Machine Platform
-wsl --install
-```
-
-**Restart your computer after running this command.**
-
-#### 4. Verify WSL 2
-
-After restart:
-
-```powershell
-wsl --version
-wsl --set-default-version 2
-```
+#### Enable Virtualization & WSL
+1.  **Enable Virtualization** in your computer's BIOS/UEFI. This is often found under "CPU Configuration" or "Security" settings.
+2.  **Enable WSL:** Open PowerShell as an Administrator and run `wsl --install`. This will enable the required Windows features and install the default Ubuntu.
+3.  **Restart your computer** when prompted.
+4.  **Set WSL 2 as default:** After restarting, open PowerShell and run `wsl --set-default-version 2`.
 
 ### Run Verification Script
-
 ```powershell
-# Download and run the check script
+# In PowerShell, navigate to this lab's directory
 cd lab-00-prerequisites
 .\check-prerequisites.ps1
 ```
 
 ### Next Step
-
-Proceed to [Lab 01: Environment Setup](../lab-01-wsl-setup/) to install Ubuntu on WSL2.
+Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
 
 ---
 
-## Linux Native
-
-### Supported Distributions
-
-| Distribution | Minimum Version |
-|--------------|----------------|
-| Ubuntu | 20.04 LTS |
-| Debian | 11 (Bullseye) |
-| Fedora | 38 |
-| RHEL/CentOS Stream | 9 |
-| openSUSE | Leap 15.5 |
+## Linux (Native)
 
 ### System Requirements
-
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
 | CPU | 64-bit, 2 cores | 4+ cores |
 | RAM | 8 GB | 16 GB |
-| Storage | 20 GB free | 40 GB free |
+| Storage | 25 GB free | 40 GB free |
 
-### Install Required Software
-
-#### Ubuntu/Debian
-
+### Install Essential Tools
 ```bash
-# Update system
+# For Ubuntu/Debian
 sudo apt update && sudo apt upgrade -y
-
-# Install essential tools
-sudo apt install -y \
-    curl \
-    wget \
-    git \
-    jq \
-    unzip \
-    ca-certificates \
-    gnupg \
-    lsb-release \
-    apt-transport-https
+sudo apt install -y curl wget git jq unzip ca-certificates
 ```
-
-#### Fedora/RHEL
-
 ```bash
-# Update system
+# For Fedora/RHEL
 sudo dnf update -y
-
-# Install essential tools
-sudo dnf install -y \
-    curl \
-    wget \
-    git \
-    jq \
-    unzip \
-    ca-certificates
-```
-
-### Verify System
-
-```bash
-# Check kernel version (needs 4.19+ for eBPF)
-uname -r
-
-# Check available memory
-free -h
-
-# Check disk space
-df -h /
-
-# Check if systemd is running
-systemctl --version
-```
-
-### Install Docker (Optional but Recommended)
-
-```bash
-# Ubuntu/Debian
-curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker $USER
-
-# Log out and back in, then verify
-docker --version
+sudo dnf install -y curl wget git jq unzip ca-certificates
 ```
 
 ### Run Verification Script
-
 ```bash
+# Navigate to this lab's directory
 cd lab-00-prerequisites
 chmod +x check-prerequisites-linux.sh
 ./check-prerequisites-linux.sh
 ```
 
 ### Next Step
-
-Proceed to [Lab 01: Environment Setup](../lab-01-wsl-setup/#linux-native) to configure your environment.
+Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
 
 ---
 
 ## macOS
 
 ### System Requirements
-
 | Component | Minimum | Recommended |
 |-----------|---------|-------------|
 | macOS Version | 12 Monterey | 14 Sonoma+ |
 | Chip | Intel or Apple Silicon | Apple Silicon |
 | RAM | 8 GB | 16 GB |
-| Storage | 20 GB free | 40 GB free |
+| Storage | 25 GB free | 40 GB free |
 
-### Check Your System
-
-```bash
-# Check macOS version
-sw_vers
-
-# Check chip architecture
-uname -m
-# arm64 = Apple Silicon, x86_64 = Intel
-```
-
-### Install Homebrew
-
-If you don't have Homebrew installed:
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-Follow the post-installation instructions to add Homebrew to your PATH.
-
-### Install Required Software
-
-```bash
-# Install essential tools
-brew install \
-    curl \
-    wget \
-    git \
-    jq \
-    coreutils
-
-# Install Visual Studio Code (optional)
-brew install --cask visual-studio-code
-```
-
-### Choose Your Kubernetes Approach
-
-#### Option A: Docker Desktop (Easiest)
-
-```bash
-brew install --cask docker
-```
-
-After installation:
-1. Open Docker Desktop
-2. Go to Settings > Kubernetes
-3. Enable Kubernetes
-4. Apply & Restart
-
-**Note:** Docker Desktop includes a built-in Kubernetes cluster, but we'll use K3s for consistency with the workshop.
-
-#### Option B: Lima + K3s (Lightweight)
-
-Lima creates lightweight Linux VMs on macOS:
-
-```bash
-# Install Lima
-brew install lima
-
-# Create an Ubuntu VM
-limactl start --name=ubuntu template://ubuntu-lts
-
-# Enter the VM
-limactl shell ubuntu
-```
-
-#### Option C: OrbStack (Apple Silicon Recommended)
-
-```bash
-brew install --cask orbstack
-```
-
-OrbStack is a fast, lightweight alternative to Docker Desktop for Apple Silicon Macs.
+### Install Homebrew & Tools
+1.  **Install Homebrew:**
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+2.  **Install Tools:**
+    ```bash
+    brew install curl wget git jq coreutils
+    ```
 
 ### Run Verification Script
-
 ```bash
+# Navigate to this lab's directory
 cd lab-00-prerequisites
 chmod +x check-prerequisites-macos.sh
 ./check-prerequisites-macos.sh
 ```
 
 ### Next Step
-
-Proceed to [Lab 01: Environment Setup](../lab-01-wsl-setup/#macos) to configure your environment.
+Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
 
 ---
-
 ## Troubleshooting
 
 ### Windows: "WSL 2 requires an update to its kernel component"
+Open PowerShell and run `wsl --update`. Then run `wsl --shutdown` before restarting your Ubuntu terminal.
 
-```powershell
-wsl --update
-```
-
-### Windows: Virtualization Not Available
-
-1. Restart and enter BIOS/UEFI (usually F2, F10, or Del during boot)
-2. Find virtualization setting (Intel VT-x, AMD-V, or SVM)
-3. Enable it and save changes
-
-### Linux: Permission Denied for Docker
-
-```bash
-sudo usermod -aG docker $USER
-# Log out and back in
-```
-
-### macOS: Homebrew Command Not Found
-
-Add Homebrew to your PATH:
-
-```bash
-# For Apple Silicon
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-source ~/.zprofile
-
-# For Intel
-echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
-source ~/.zprofile
-```
-
-### Corporate/Managed Device
-
-If your device is managed by IT:
-- Request necessary permissions for virtualization
-- Ask about proxy settings for package downloads
-- Consider using a personal device for the workshop
+### Linux/macOS: `docker` command fails with "permission denied"
+You need to log out and log back in after adding your user to the `docker` group. This is a common issue on Linux. On macOS, ensure Docker Desktop is running.
