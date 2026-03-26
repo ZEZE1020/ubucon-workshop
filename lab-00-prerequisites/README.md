@@ -30,7 +30,7 @@ This is the most important pre-workshop step. Open your terminal (or PowerShell 
 
 ```bash
 # Download the K3s image (for our Kubernetes cluster)
-docker pull rancher/k3s:v1.28.8-k3s.1
+docker pull rancher/k3s:v1.28.8-k3s1
 
 # Download the Cilium images (for networking)
 docker pull quay.io/cilium/cilium:v1.15.1
