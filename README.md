@@ -2,10 +2,10 @@
 
 > **UbuCon Kenya 2026 - Nairobi, Kenya**
 
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com){:target="_blank"}{:target=_blank}
-[![WSL](https://img.shields.io/badge/WSL2-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows/wsl/){:target="_blank"}{:target=_blank}
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-K3s-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://k3s.io/){:target="_blank"}{:target=_blank}
-[![Cilium](https://img.shields.io/badge/Cilium-eBPF-2394F4?style=for-the-badge&logo=cilium&logoColor=white)](https://cilium.io/){:target="_blank"}{:target=_blank}
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com){:target="_blank"}
+[![WSL](https://img.shields.io/badge/WSL2-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows/wsl/){:target="_blank"}
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-K3s-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://k3s.io/){:target="_blank"}
+[![Cilium](https://img.shields.io/badge/Cilium-eBPF-2394F4?style=for-the-badge&logo=cilium&logoColor=white)](https://cilium.io/){:target="_blank"}
 
 ## Welcome! Karibu!
 
@@ -57,12 +57,12 @@ During the workshop:
 
 After the workshop:
 - Open an issue in this repository.
-- Connect with the [Ubuntu Kenya LoCo Team](https://discourse.ubuntu.com/c/community/circles/ubuntu-ke/421){:target="_blank"}.{:target=_blank}
-- Join the [Cloud Native Nairobi community](https://community.cncf.io/nairobi/){:target="_blank"}.{:target=_blank}
+- Connect with the [Ubuntu Kenya LoCo Team](https://discourse.ubuntu.com/c/community/circles/ubuntu-ke/421){:target="_blank"}
+- Join the [Cloud Native Nairobi community](https://community.cncf.io/nairobi/){:target="_blank"}
 
 ## License
 
-This workshop material is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/){:target="_blank"}.{:target=_blank}
+This workshop material is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/){:target="_blank"}
 
 ---
 

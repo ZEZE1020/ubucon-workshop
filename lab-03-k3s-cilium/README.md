@@ -87,7 +87,7 @@ Hubble lets you see the network connections in your cluster.
     ```bash
     cilium hubble ui
     ```
-    This command will open the Hubble dashboard in your web browser at `http://localhost:12000`.{:target=_blank}
+    This command will open the Hubble dashboard in your web browser at `http://localhost:12000`.
 
 2.  **Explore the UI:**
     - It will look empty right now because we haven't deployed our own applications yet.

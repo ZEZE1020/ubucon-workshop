@@ -198,7 +198,7 @@ In the UI:
 ```bash
 # In a separate terminal on macOS
 limactl shell workshop -- kubectl port-forward -n kube-system svc/hubble-ui 12000:80
-# Then open http://localhost:12000{:target=_blank} in your browser
+# Then open http://localhost:12000 in your browser
 ```
 
 ## Step 6: Generate Traffic for Visualization
@@ -297,7 +297,7 @@ If running in Lima, forward the port manually:
 ```bash
 # On macOS host
 limactl shell workshop -- kubectl port-forward -n kube-system svc/hubble-ui 12000:80 &
-open http://localhost:12000{:target=_blank}
+open http://localhost:12000
 ```
 
 ## Key Takeaways

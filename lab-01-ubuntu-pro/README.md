@@ -12,7 +12,7 @@ Normally, Ubuntu provides security updates for the main operating system package
 
 ## Step 1: Get Your Ubuntu Pro Token
 
-1.  Open your web browser and go to [**ubuntu.com/pro/dashboard**](https://ubuntu.com/pro/dashboard){:target="_blank"}.{:target=_blank}
+1.  Open your web browser and go to [**ubuntu.com/pro/dashboard**](https://ubuntu.com/pro/dashboard){:target="_blank"}
 2.  Log in with your Ubuntu One account. If you don't have one, you can create one for free.
 3.  On your dashboard, you will see a "Free Personal Token" section.
 4.  Copy the token. It will be part of a command that looks like `sudo pro attach YOUR_TOKEN_HERE`. Keep it handy for the next step.

@@ -20,7 +20,7 @@ print_banner() {
     echo -e "${CYAN}"
     echo "======================================================"
     echo "     K3s + Cilium Installation"
-    echo "     UbuCon Africa 2026 Workshop"
+    echo "     UbuCon Kenya 2026 Workshop"
     echo "======================================================"
     echo -e "${NC}"
 }

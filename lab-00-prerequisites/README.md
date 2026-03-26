@@ -18,7 +18,7 @@ First, you need to get all the workshop files on your computer.
 
     ```bash
     # TODO: Replace this with the correct repository URL
-    git clone https://github.com/placeholder/ubucon-workshop2026.git{:target=_blank}
+    git clone https://github.com/placeholder/ubucon-workshop2026.git
     ```
 4.  Navigate into the newly created directory:
     ```bash
@@ -58,7 +58,7 @@ Now, follow the guide for your operating system.
 
 ### 2. Install Docker Desktop
 The easiest way to get Docker on Windows is to install Docker Desktop.
-- Download and install from [the Docker website](https://www.docker.com/products/docker-desktop/){:target="_blank"}.{:target=_blank}
+- Download and install from [the Docker website](https://www.docker.com/products/docker-desktop/){:target="_blank"}
 - During setup, ensure you select the option to **use the WSL 2 based engine**.
 
 ### 3. Enable `systemd` in Ubuntu
@@ -118,7 +118,7 @@ sudo dnf install -y curl wget git jq unzip ca-certificates gnupg
 ### 2. Install Docker
 ```bash
 # For Ubuntu/Debian
-curl -fsSL https://get.docker.com{:target=_blank} | sudo sh
+curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker $USER
 # IMPORTANT: Log out and log back in after running this!
 ```
@@ -143,7 +143,7 @@ Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
 ### 1. Install Homebrew
 If you don't have it, open your terminal and run:
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"{:target=_blank}
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 ### 2. Install All Workshop Tools with Brew

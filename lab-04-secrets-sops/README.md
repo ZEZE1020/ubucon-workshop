@@ -220,7 +220,7 @@ sudo apt install -y age
 
 # Install sops
 SOPS_VERSION="3.8.1"
-curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64"{:target="_blank"}{:target=_blank}
+curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64"{:target="_blank"}
 sudo mv "sops-v${SOPS_VERSION}.linux.amd64" /usr/local/bin/sops
 sudo chmod +x /usr/local/bin/sops
 ```
