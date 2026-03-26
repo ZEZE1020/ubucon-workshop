@@ -9,15 +9,15 @@
 
 ## Welcome! Karibu!
 
-This hands-on workshop will guide you through building a secure, production-grade development environment. You'll learn industry best practices for container security, secrets management, and network policies.
+This hands-on workshop will guide you through building a secure, development environment. You'll learn industry best practices for container security, secrets management, and network policies.
 
 **Works on:** Windows (WSL2), Linux (Ubuntu/Debian/Fedora), and macOS
 
 **By the end of this workshop, you will:**
 - Set up a local Kubernetes cluster (K3s)
-- Implement GitOps-friendly secrets encryption with SOPS and age
+- Implement GitOps-friendly secrets  with SOPS and age
 - Build minimal-attack-surface containers using Canonical Chiseled images
-- Apply Zero Trust network policies with Cilium eBPF
+- Apply network policies with Cilium eBPF
 - Visualize network traffic and security events with Hubble
 
 ## Choose Your Path
@@ -89,7 +89,7 @@ Follow the labs in order. Each lab builds on the previous one.
 ## Getting Help
 
 During the workshop:
-- Raise your hand for instructor assistance
+- Raise your hand for assistance
 - Check the troubleshooting section in each lab's README
 - Ask your neighbor - pair programming encouraged!
 
