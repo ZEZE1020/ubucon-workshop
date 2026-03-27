@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xwing
+  namespace: empire
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xwing
+  template:
+    metadata:
+      labels:
+        app: xwing
+        org: alliance
+        class: rebel
+    spec:
+      containers:
+      - name: xwing
+        image: curlimages/curl:8.4.0
+        command: ["sleep", "3600"]

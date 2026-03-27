@@ -2,7 +2,7 @@
 
 > **Duration:** 30-40 minutes (including downloads)
 
-Welcome to the workshop! This first lab is one of the most important. It will guide you through setting up your computer and downloading all the necessary tools and files before the event.
+Welcome to the workshop! This first lab will guide you through setting up your computer and downloading all the necessary tools and files before the event.
 
 **Please complete this entire lab at home or on a fast connection to avoid slow downloads over conference Wi-Fi.**
 
@@ -40,7 +40,7 @@ Now, follow the guide for your operating system.
 
 ## Windows
 
-> **A Note on PowerShell:** For the initial Windows setup, we will use **PowerShell** to install and configure the Windows Subsystem for Linux (WSL). PowerShell is a command-line tool for Windows, similar to the terminal in Linux or macOS. **Once WSL and Ubuntu are running, all other workshop labs will take place inside the Ubuntu terminal.**
+> **A Note on PowerShell:** For the initial Windows setup, we will use **PowerShell** to install and configure the Windows Subsystem for Linux (WSL). **Once WSL and Ubuntu are running, all other workshop labs will take place inside the Ubuntu terminal.**
 
 ### System Requirements
 
@@ -62,7 +62,7 @@ The easiest way to get Docker on Windows is to install Docker Desktop.
 - During setup, ensure you select the option to **use the WSL 2 based engine**.
 
 ### 3. Enable `systemd` in Ubuntu
-`systemd` is a program that starts and manages other services in Linux. We need it for Kubernetes.
+`systemd` is a program that starts and manages other services in Linux. We will need it for Kubernetes.
 
 1.  **Open your Ubuntu terminal.**
 2.  Create or edit the WSL configuration file:

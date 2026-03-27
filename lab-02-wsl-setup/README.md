@@ -8,7 +8,7 @@ In Lab 00, you installed Ubuntu on WSL. Now, we need to enable a feature called 
 
 ## Why Enable `systemd`?
 
-`systemd` is a program that starts and manages other services in Linux. We need it to run tools like Kubernetes (K3s), which we will install in the next lab. While newer versions of WSL enable this by default, these steps ensure it is active.
+`systemd` is a program that starts and manages other services in Linux. We need it to run tools like Kubernetes (Kind), which we will install in the next lab. While newer versions of WSL enable this by default, these steps ensure it is active.
 
 ## Step 1: Enable `systemd` in Ubuntu
 
@@ -57,4 +57,4 @@ If you get an error that `nano` is not found, you can install it with `sudo apt 
 
 Your environment is now ready for Kubernetes!
 
-Proceed to **[Lab 03: K3s + Cilium](../lab-03-k3s-cilium/)**.
+Proceed to **[Lab 03: Kind + Cilium](../lab-03-kind-cilium/)**.

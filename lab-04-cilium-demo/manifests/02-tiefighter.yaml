@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tiefighter
+  namespace: empire
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tiefighter
+  template:
+    metadata:
+      labels:
+        app: tiefighter
+        org: empire
+        class: imperial
+    spec:
+      containers:
+      - name: tiefighter
+        image: curlimages/curl:8.4.0
+        command: ["sleep", "3600"]
