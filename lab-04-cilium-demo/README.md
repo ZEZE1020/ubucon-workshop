@@ -91,7 +91,13 @@ Return to the Hubble UI in your browser.
 -   The traffic from the `nazgul` to `barad-dur` remains **GREEN** (Allowed).
 -   The traffic from the `hobbit` to `barad-dur` is now **RED** (Blocked/Dropped).
 
-You have visually confirmed that your Zero Trust policy is working exactly as intended! The policy is being enforced by eBPF in the Linux kernel, making it incredibly fast and secure.
+![Network Policy in Action](Network-policy.png)
+
+![Network Policy in Action](Network-policy.png)
+
+![Network Policy in Action](Network-policy.png)
+
+You have visually confirmed that your security policy is working exactly as intended! Cilium is enforcing the rule at a deep level within Linux, making it very fast and secure.
 
 ## Cleanup
 
