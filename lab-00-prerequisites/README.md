@@ -179,8 +179,8 @@ Proceed to **[Lab 01: Ubuntu Pro & ESM](../lab-01-ubuntu-pro/)**.
 This is the most important pre-workshop step. Open your terminal (or Ubuntu terminal on WSL) and run the following commands to download all the application images we will use.
 
 ```bash
-# Download the K3s image (for our Kubernetes cluster)
-docker pull rancher/k3s:v1.28.8-k3s1
+# Download the Kind image (for our Kubernetes cluster)
+docker pull kindest/node:v1.28.2
 
 # Download the Cilium images (for networking)
 docker pull quay.io/cilium/cilium:v1.15.1
@@ -205,11 +205,10 @@ We are pre-downloading these container images to save time during the workshop. 
 
 | Image Name | Purpose in Workshop |
 |------------|---------------------|
-| `rancher/k3s` | The core of our lightweight Kubernetes cluster (Lab 03). |
-| `quay.io/cilium/*` | The components for Cilium networking and the Hubble UI (Lab 03 & 05). |
-| `redis` | A simple database that our sample application will use (Lab 05). |
-| `curlimages/curl` | A small utility we will use to test network connections (Lab 05). |
-| `ubuntu/python` | The base for the secure API server we will build (Lab 04). |
+| `kindest/node` | The base for our lightweight Kubernetes cluster (Lab 03). |
+| `quay.io/cilium/*` | The components for Cilium networking and the Hubble UI (Lab 03 & 04). |
+| `curlimages/curl` | A small utility we will use to test network connections (Lab 04). |
+| `ealen/echo-server` | A simple web server for our demo application (Lab 04). |
 
 ---
 ## Troubleshooting

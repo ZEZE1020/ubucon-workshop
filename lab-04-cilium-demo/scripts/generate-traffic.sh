@@ -3,11 +3,11 @@
 echo "Generating traffic... Press [CTRL+C] to stop."
 
 while true; do
-  # TIE Fighter (authorized) attempts to access the exhaust port
-  kubectl exec -n empire deploy/tiefighter -- curl -s -o /dev/null -w "TIE Fighter request to /v1/exhaust-port: %{http_code}\n" http://deathstar/v1/exhaust-port
+  # Nazgûl (authorized) attempts to access the Palantir
+  kubectl exec -n mordor deploy/nazgul -- curl -s -o /dev/null -w "Nazgûl request to /v1/palantir: %{http_code}\n" http://barad-dur/v1/palantir
 
-  # X-Wing (unauthorized) attempts to access the exhaust port
-  kubectl exec -n empire deploy/xwing -- curl -s -o /dev/null -w "X-Wing request to /v1/exhaust-port: %{http_code}\n" http://deathstar/v1/exhaust-port
+  # Hobbit (unauthorized) attempts to access the Palantir
+  kubectl exec -n mordor deploy/hobbit -- curl -s -o /dev/null -w "Hobbit request to /v1/palantir: %{http_code}\n" http://barad-dur/v1/palantir
 
   sleep 2
 done

@@ -58,12 +58,13 @@ During the workshop:
 
 After the workshop:
 - Open an issue in this repository.
-- Connect with the [Ubuntu Kenya LoCo Team](https://discourse.ubuntu.com/c/community/circles/ubuntu-ke/421){:target="_blank"}
-- Join the [Cloud Native Nairobi community](https://community.cncf.io/nairobi/){:target="_blank"}
+- Connect with the [Ubuntu Kenya LoCo Team](https://discourse.ubuntu.com/c/community/circles/ubuntu-ke/421)
+
+- Join the [Cloud Native Nairobi community](https://community.cncf.io/nairobi/)
 
 ## License
 
-This workshop material is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/){:target="_blank"}
+This workshop material is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 ---
 

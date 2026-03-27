@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tiefighter
-  namespace: empire
+  name: nazgul
+  namespace: mordor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tiefighter
+      app: nazgul
   template:
     metadata:
       labels:
-        app: tiefighter
-        org: empire
-        class: imperial
+        app: nazgul
+        faction: sauron
+        race: nazgul
     spec:
       containers:
-      - name: tiefighter
+      - name: nazgul
         image: curlimages/curl:8.4.0
         command: ["sleep", "3600"]

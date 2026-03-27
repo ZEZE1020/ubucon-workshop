@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xwing
-  namespace: empire
+  name: hobbit
+  namespace: mordor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: xwing
+      app: hobbit
   template:
     metadata:
       labels:
-        app: xwing
-        org: alliance
-        class: rebel
+        app: hobbit
+        faction: free-peoples
+        race: hobbit
     spec:
       containers:
-      - name: xwing
+      - name: hobbit
         image: curlimages/curl:8.4.0
         command: ["sleep", "3600"]

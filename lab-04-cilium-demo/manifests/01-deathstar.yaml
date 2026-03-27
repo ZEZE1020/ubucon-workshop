@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deathstar
-  namespace: empire
+  name: barad-dur
+  namespace: mordor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: deathstar
+      app: barad-dur
   template:
     metadata:
       labels:
-        app: deathstar
-        org: empire
+        app: barad-dur
+        faction: sauron
     spec:
       containers:
-      - name: deathstar
+      - name: barad-dur
         image: "docker.io/ealen/echo-server"
         env:
         - name: PORT
@@ -26,11 +26,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: deathstar
-  namespace: empire
+  name: barad-dur
+  namespace: mordor
 spec:
   ports:
   - port: 80
     targetPort: 80
   selector:
-    app: deathstar
+    app: barad-dur
