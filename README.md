@@ -2,10 +2,14 @@
 
 > **UbuCon Kenya 2026 - Nairobi, Kenya**
 
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com){:target="_blank"}
-[![WSL](https://img.shields.io/badge/WSL2-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows/wsl/){:target="_blank"}
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-Kind-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kind.sigs.k8s.io/){:target="_blank"}
-[![Cilium](https://img.shields.io/badge/Cilium-eBPF-2394F4?style=for-the-badge&logo=cilium&logoColor=white)](https://cilium.io/){:target="_blank"}
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com)
+
+[![WSL](https://img.shields.io/badge/WSL2-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows/wsl/)
+
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-Kind-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kind.sigs.k8s.io/)
+
+[![Cilium](https://img.shields.io/badge/Cilium-eBPF-2394F4?style=for-the-badge&logo=cilium&logoColor=white)](https://cilium.io/)
+
 
 ## Welcome! 
 
