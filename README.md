@@ -1,4 +1,4 @@
-# Bridging the Divide: Cloud-Native Skills on Any Laptop
+# Cloud-Native Skills on Any Laptop
 
 > **UbuCon Kenya 2026 - Nairobi, Kenya**
 
