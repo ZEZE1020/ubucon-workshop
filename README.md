@@ -40,6 +40,8 @@ Follow the labs in order. Each one builds on the last.
 
 ## Why These Technologies?
 
+![Workshop Architecture](labexplanationWSL.png)
+
 These tools are popular, powerful, and work well on a laptop.
 
 | Technology | Purpose | Why It's Useful |
@@ -47,7 +49,7 @@ These tools are popular, powerful, and work well on a laptop.
 | **Ubuntu on WSL** | The Foundation | Run the most popular operating system for cloud servers on your Windows PC. |
 | **Ubuntu Pro** | Extra Security | Get free access to security patches that keep your applications safe. |
 | **Kind Kubernetes**| Local Kubernetes | A simple version of Kubernetes that's easy to run on your laptop. |
-| **Cilium** | Networking & Observability | A modern way to manage and visualize network connections between your apps. |
+| **Cilium** | Networking & Security | A modern way to manage and see the network connections between your apps. |
 
 ## Getting Help
 

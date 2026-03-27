@@ -7,9 +7,9 @@ In this lab, you will deploy a fully functional, local Kubernetes cluster on you
 ## What You'll Learn
 
 - How to create a local Kubernetes cluster with Kind.
-- How to install the Cilium CNI (Container Network Interface).
-- How to verify that your cluster and networking are healthy.
-- How to enable the Hubble UI for network observability.
+- How to install Cilium to handle network traffic.
+- How to verify that your cluster and its networking are healthy.
+- How to enable the Hubble UI to see network traffic.
 
 ## Step 1: Create the Kind Cluster
 
@@ -70,7 +70,7 @@ Deployment        cilium-operator    OK
 
 ## Step 3: Enable the Hubble UI
 
-Hubble is a powerful observability tool that comes with Cilium. Let's enable its user interface.
+Hubble is a tool that comes with Cilium that lets you see the traffic between your applications. Let's turn on its user interface.
 
 1.  **Enable the Hubble UI:**
     ```bash
@@ -84,6 +84,8 @@ Hubble is a powerful observability tool that comes with Cilium. Let's enable its
     This command will open the Hubble UI in your web browser, usually at `http://localhost:12000`. You won't see much traffic yet, but we will change that in the next lab.
 
 ## Summary
+
+![Hubble, K8s, and Cilium](HubbleK8S,cillium.png)
 
 Congratulations! You now have a fully functional Kubernetes cluster running locally, powered by Kind and Cilium. Your environment is ready for deploying applications and defining network policies.
 
